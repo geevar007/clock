@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>calculator</title>
+    <link href="cal.css" type="text/css"rel="stylesheet">
+</head>
+<body>
+    
+<div id="main">
+
+
+<div id="outer">
+
+<div>
+<input id="screen"type="text" class="disScreen"placeholder="88888888888888" readonly>
+
+
+</div>
+<div class="r0">
+    <button onclick="allclr()"Class="ac" id="AC">AC</button>
+    <button onclick="clear()"Class="c" id="cb">C</button>
+   
+ 
+    </div>
+<div class="r1">
+<button onclick="gpress(1)" Class="but" id="b1">1</button>
+<button onclick="gpress(2)"Class="but"id="b2">2</button>
+<button onclick="gpress(3)"Class="but"id="b3">3</button>
+<button onclick="gpress('/')"Class="but" id="by">/</button>
+</div>
+<div class="r1">
+    <button onclick="gpress(4)" Class="but" id="b1">4</button>
+    <button onclick="gpress(5)"Class="but"id="b2">5</button>
+    <button onclick="gpress(6)"Class="but"id="b3">6</button>
+    <button onclick="gpress('*')"Class="but" id="mul">x</button>
+    </div>
+    <div class="r1">
+        <button onclick="gpress(7)"Class="but" id="b1">7</button>
+        <button onclick="gpress(8)"Class="but"id="b2">8</button>
+        <button onclick="gpress(9)"Class="but"id="b3">9</button>
+        <button onclick="gpress('-')"Class="but" id="sub/">-</button>
+        </div>
+        <div class="r1">
+            <button onclick="gpress('.')"Class="but" id="b1">.</button>
+            <button onclick="gpress(0)"Class="but"id="b2">0</button>
+            <button onclick="gpress('+')"Class="but"id="b3">+</button>
+            <button onclick="gpress('=')"Class="but" id="eq">=</button>
+            </div>
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+</div>
+
+
+
+<script src="cal.js"></script>
+</body>
+</html>
