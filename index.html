@@ -24,10 +24,10 @@
 	hour.style.transform = `rotate(${hr_rotation}deg)`;
 	minute.style.transform = `rotate(${min_rotation}deg)`;
 	//second.style.transform = `rotate(${sec_rotation}deg)`;
-    pendu.style.transform = `rotate(${s}deg)`;
-    if (s==10){x=10};
-    if(s==-10){x=0};
-}, 45);
+  //  pendu.style.transform = `rotate(${s}deg)`;
+    //if (s==10){x=10};
+  //  if(s==-10){x=0};
+//  }, 45);
 
   
   </script>
@@ -39,7 +39,7 @@
 		<img id="hour"src="h.png" alt="Hourr" />
 		<img id="minute"src="m.png" alt="Minut" />
 		<img id="second"src="s.png" alt="second" />
-        <img id="pendu"src="p.png" alt="pendul">
+        <img class="swing" id="pendu"src="p.png" alt="pendul">
    
   
   </div>
@@ -113,6 +113,16 @@
   
 }
 
-   
+   @keyframes swing {0% {transform: rotate(9deg);} 
+ 100% {transform: rotate(-9deg);} } 
+
+ .swing {
+        animation: swing ease-in-out 1s infinite alternate;
+        transform-origin: center 30px;
+    }
+	  
+	  
+	  
+	  
   
   </style>
