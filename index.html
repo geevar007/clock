@@ -16,18 +16,13 @@
 	hr_rotation = 30 * hr + min / 2; //converting current time
 	min_rotation = 6 *min+.1*sec;
 	//sec_rotation = 6*sec+.006*msec;
-    if (x==0){s=s+1};
-   
-    if(x==10){s=s-1};
-    
-
-	hour.style.transform = `rotate(${hr_rotation}deg)`;
+   	hour.style.transform = `rotate(${hr_rotation}deg)`;
 	minute.style.transform = `rotate(${min_rotation}deg)`;
 	//second.style.transform = `rotate(${sec_rotation}deg)`;
   //  pendu.style.transform = `rotate(${s}deg)`;
     //if (s==10){x=10};
   //  if(s==-10){x=0};
-//  }, 45);
+ }, 45);
 
   
   </script>
