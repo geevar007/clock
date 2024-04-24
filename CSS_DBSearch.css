@@ -109,10 +109,10 @@ tr:nth-child(even) {
 }
 #title{  
   margin:auto;  
-  margin-top: 10px;
+  margin-top: 17px;
        
         width: fit-content;
-        border-bottom: 2px solid #ebd9caab;;
+        border-bottom: 1px solid #ebd9caab;;
 }
 input:focus{
         outline: 0!important;
