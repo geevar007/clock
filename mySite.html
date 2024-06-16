@@ -10,7 +10,7 @@
 <body>
  
    
-
+  
     
     
      <div id="liquidContainer">
@@ -20,14 +20,30 @@
 
 
         <div id="mobileScreen"> 
-    
+
+            <div class="trade">
+                <div class="form-group">
+                    <input type="number" id="boughtPrice" placeholder="Bought Price" oninput="calculate(1)">
+                </div>
+                <div class="form-group">
+                    <input type="number" id="soldPrice" placeholder="Sold Price" oninput="calculate(1)">
+                </div>
+                <div class="form-group">
+                    <input type="number" id="percentage" placeholder="Percentage" oninput="calculate(2)">
+                </div>
+                
+            </div>
+            <div class="trade">
+            <div class="result" id="result">Profit</div>
+            <div class="result" id="newBoughtValue">Target</div>
+        </div>
     <img src="https://geevar007.mobie.in/images/Geevar%20logo.png" alt="" onclick="playRadio()" /> 
     
 
   
     <a href="https://geevar007.github.io/glog/"><img src="https://geevar007.github.io/glog/Title.png" alt="My Ta" /></a>
     <a href="https://geevar007.github.io/cardmaker/index.html"><img src="https://geevar007.mobie.in/images/printer.png" alt="card maker" /></a>
-    <xt:code><a href="https://geevar007.github.io/clock/database.html"></xt:code><img src="https://geevar007.mobie.in/images/document-search-flat.png" alt="excel search" /> DB Search</a>
+    <xt:code><a href="https://geevar007.github.io/clock/database.html"></xt:code><img src="https://geevar007.mobie.in/images/document-search-flat.png" alt="excel search" /></a>
     
  <a href="https://geevar007.github.io/clock/"><img src="https://geevar007.mobie.in/images/Time.png" alt="Clock" /></a>
   <a href="https://geevar007.github.io/glog/Sticker.html"><img src="https://geevar007.mobie.in/images/stickerPrint.png" alt="" /></a> 
@@ -35,7 +51,7 @@
      <a href="https://ceir.sancharsaathi.gov.in/Device/CeirIMEIVerification.jsp"><img src="https://geevar007.mobie.in/images/IMEI Find.png" alt="" /></a>
    <a href="https://kuttipencil.in/"><img src="https://kuttipencil.in/img/logo.png" alt="" /></a>
    <a href="https://chat.openai.com/"><img src="https://geevar007.mobie.in/images/ChatGpt.png" alt="" /></a><a href="https://www.tinkercad.com"><img src="https://www.tinkercad.com/favicon.ico" alt="" /></a>
-    <a href="https://www.circuitlab.com"><img src="https://www.circuitlab.com/assets/images/apple-touch-icon-72x72.png" alt="" />Online Circuti simul</a>
+    <a href="https://www.circuitlab.com"><img src="https://www.circuitlab.com/assets/images/apple-touch-icon-72x72.png" alt="Circuit simulator" /></a>
   
   
         </div>
@@ -72,13 +88,41 @@
   
   
    <script> 
-  
-  
+  var radioStatus="stoped";
+  function calculate(e) {
+        var boughtPrice = parseFloat(document.getElementById('boughtPrice').value);
+        var soldPrice = parseFloat(document.getElementById('soldPrice').value);
+        var percentage = parseFloat(document.getElementById('percentage').value);
+
+      
+
+        var profit = soldPrice - boughtPrice;
+        var profitPercentage = (profit / boughtPrice) * 100;
+
+        document.getElementById('result').innerText =  profitPercentage.toFixed(2) + '%';
+        if (isNaN(boughtPrice) || isNaN(soldPrice) || boughtPrice <= 0) {
+            document.getElementById('result').innerText = 'Profit';
+           }
+        if (!isNaN(percentage) && !isNaN(boughtPrice) ) {
+            var newBoughtValue = boughtPrice + (boughtPrice * (percentage / 100));
+            document.getElementById('newBoughtValue').innerText = 'Target: ' + newBoughtValue.toFixed(2);
+        } else {
+            document.getElementById('newBoughtValue').innerText = 'Target';
+        }
+    }
   
      function playRadio(){
+    if(radioStatus=="stoped"){  document.getElementById("myAudio").play() ;
+    radioStatus="playng"   }
+    else{
+
+
+        document.getElementById("myAudio").pause();
+        radioStatus="stoped"
+
+    }
     
-    
-     document.getElementById("myAudio").play() }
+      }
   
   
   </script>
@@ -97,6 +141,34 @@
 
     margin:0px;
 }
+.trade {
+            display: flex;
+            align-items: center;
+            padding: 11px;
+            border: 1px solid white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-right: 10px;
+        }
+        .form-group input {
+            width: 100px;
+            padding: 1px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        .result {
+            margin-left: 20px;
+            padding: 2px;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+            width:50%;
+            min-width: 50px;
+            min-height: 18px;
+        }
 
 #liquidContainer{
     background-color: rgb(39, 137, 230);
@@ -118,6 +190,7 @@ background-repeat: no-repeat;
 }
 #mobileScreen{
     margin-left: 28px;
+    margin-top:35Px;
    border-radius: 25px;
 
     height:727px;
@@ -167,7 +240,7 @@ img {
     
     img{
     
-      height:50px  
+      height:43px  
     }
    
 </style>
