@@ -63,7 +63,7 @@
 
     </div>
     
-  
+  <audio controls id="myAudio2" src="http://97.74.94.190:17101/helloradio.ogg" style="display:none"></audio>
   
    <audio controls="as" id="myAudio" src="https://cast1.my-control-panel.com/proxy/myradio90fm/stream" style="display:none"></audio>
 
@@ -112,13 +112,22 @@
     }
   
      function playRadio(){
+         
     if(radioStatus=="stoped"){  document.getElementById("myAudio").play() ;
-    radioStatus="playng"   }
+    radioStatus="playing1";
+     }
     else{
-
-
-        document.getElementById("myAudio").pause();
-        radioStatus="stoped"
+       
+       if(radioStatus=="playing1"){ 
+           document.getElementById("myAudio").pause();
+        document.getElementById("myAudio2").play();
+        radioStatus="playing2" ;
+                           }
+        else{    
+            
+            document.getElementById("myAudio2").pause();
+        radioStatus="stoped";
+        }
 
     }
     
