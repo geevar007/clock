@@ -53,7 +53,9 @@
    <a href="https://chat.openai.com/"><img src="https://geevar007.mobie.in/images/ChatGpt.png" alt="" /></a><a href="https://www.tinkercad.com"><img src="https://www.tinkercad.com/favicon.ico" alt="" /></a>
     <a href="https://www.circuitlab.com"><img src="https://www.circuitlab.com/assets/images/apple-touch-icon-72x72.png" alt="Circuit simulator" /></a>
   
-  
+   
+    <marquee id="scrolText" height="20"direction="left">* * * * *</marquee>
+   
         </div>
 
 
@@ -115,17 +117,22 @@
          
     if(radioStatus=="stoped"){  document.getElementById("myAudio").play() ;
     radioStatus="playing1";
+    document.getElementById("scrolText").innerHTML="* * * * My Radio Playing * * * *"
+    console.log("My Radio");
      }
     else{
        
        if(radioStatus=="playing1"){ 
+        console.log("Hello Radio");
            document.getElementById("myAudio").pause();
         document.getElementById("myAudio2").play();
+        document.getElementById("scrolText").innerHTML="* * * * Hello Radio Playing * * * *"
         radioStatus="playing2" ;
                            }
         else{    
-            
+            console.log("Stoped");
             document.getElementById("myAudio2").pause();
+            document.getElementById("scrolText").innerHTML="* * * * * * * *"
         radioStatus="stoped";
         }
 
@@ -145,7 +152,11 @@
 
   <style>
     
-    
+    @font-face {
+    font-family:pixel;
+    src: url("pixel.ttf");
+   
+  }
     body{
 
     margin:0px;
@@ -209,7 +220,12 @@ width:335px;
     
     
     
-    
+   #scrolText{
+
+color: white;
+font-family: pixel,sans-serif;
+
+   } 
   
     
 
