@@ -37,9 +37,9 @@
             <div class="result" id="result">Profit</div>
             <div class="result" id="newBoughtValue">Target</div>
         </div>
-    <img src="https://geevar007.mobie.in/images/Geevar%20logo.png" alt="" onclick="playRadio()" /> 
+  
     
-
+ <a href="https://geevar007.github.io/glog/Radio%20home.html"><img src="https://geevar007.mobie.in/images/Geevar%20logo.png" alt="Radio" /></a>
   
     <a href="https://geevar007.github.io/glog/"><img src="https://geevar007.github.io/glog/Title.png" alt="My Ta" /></a>
     <a href="https://geevar007.github.io/cardmaker/index.html"><img src="https://geevar007.mobie.in/images/printer.png" alt="card maker" /></a>
@@ -65,9 +65,7 @@
 
     </div>
     
-  <audio controls id="myAudio2" src="http://97.74.94.190:17101/helloradio.ogg" style="display:none"></audio>
-  
-   <audio controls="as" id="myAudio" src="https://cast1.my-control-panel.com/proxy/myradio90fm/stream" style="display:none"></audio>
+ 
 
 </body>
 </html>
@@ -90,7 +88,7 @@
   
   
    <script> 
-  var radioStatus="stoped";
+ 
   function calculate(e) {
         var boughtPrice = parseFloat(document.getElementById('boughtPrice').value);
         var soldPrice = parseFloat(document.getElementById('soldPrice').value);
@@ -113,32 +111,7 @@
         }
     }
   
-     function playRadio(){
-         
-    if(radioStatus=="stoped"){  document.getElementById("myAudio").play() ;
-    radioStatus="playing1";
-    document.getElementById("scrolText").innerHTML="* * * * My Radio Playing * * * *"
-    console.log("My Radio");
-     }
-    else{
-       
-       if(radioStatus=="playing1"){ 
-        console.log("Hello Radio");
-           document.getElementById("myAudio").pause();
-        document.getElementById("myAudio2").play();
-        document.getElementById("scrolText").innerHTML="* * * * Hello Radio Playing * * * *"
-        radioStatus="playing2" ;
-                           }
-        else{    
-            console.log("Stoped");
-            document.getElementById("myAudio2").pause();
-            document.getElementById("scrolText").innerHTML="* * * * * * * *"
-        radioStatus="stoped";
-        }
-
-    }
     
-      }
   
   
   </script>
