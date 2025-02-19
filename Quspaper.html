@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QustPaper</title>
+    <title>Easy Ques Paper</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
  
 </head>
@@ -43,14 +43,17 @@
     </div>
 
     <div id="tools"  class="noPrint">
+   <i class="fa fa-home fa-lg zoom" aria-hidden="true" title="Home"  onclick="window.open('https://geevar007.github.io/clock/mySite.html')"></i>
+   <button  onclick="window.open('https://kuttipencil.in/google/')" title="ടൈപ്പ് ചെയാം" >മ</button>
         <input type="checkbox" id="language" name="language" value="eng" onchange="checkValue()">
         <label for="language">Mal</label><br>
        
       
 
-<button id="textButton"><i class="fa fa-plus" aria-hidden="true"></i>Text</button>
-<button id="imageButton"><i class="fa fa-plus" aria-hidden="true"></i>Image</button>
-<input type="file" id="fileInput" accept="image/*" />
+<button id="textButton" onclick="addQuestion()" title="Add Text"><i class="fa fa-pencil"></i> Text</button>
+<button id="imageButton"onclick="clickOnFileInput()"title="Add Image"><i class="fa fa-image"></i> Img</button>
+<button onclick="twoDiv()" id="splitdiv" title="Add Multi Secton"><i class="fa fa-object-group"></i> Split</button>
+<input type="file" id="fileInput" accept="image/*">
 
 
 
@@ -59,15 +62,18 @@
 
 
 
-<label for="myDropdown">Subject</label>
+<label for="myDropdown">Sub:</label>
 <select id="myDropdown" name="options" onchange="subChange()">
   <option value="MATHS ഗണിതം">Maths</option>
   <option value="ENGLISH">English</option>
   <option value="Test ]-co-£-Ww-">Test</option>
 
 </select>
-<button  onclick="changeFont()"><i class="fa fa-exchange" aria-hidden="true"></i> FontCng</button>
+<button  onclick="changeFont()"title="Change Font"><i class="fa fa-exchange" aria-hidden="true"></i> FontCng</button>
 <button  onclick="window.print()"><i class="fa fa-print" aria-hidden="true"></i> Print</button>
+
+
+
 
 
 
@@ -80,7 +86,7 @@
         <p id="sizeDisplay" class="mousePointer">24</p>
     
     </div>
-
+<input type="text">
 </div>
 
 </body>
@@ -219,6 +225,17 @@ justify-content: space-between;
 
 
 }
+.multiDiv{
+
+    display: flex;
+    align-items: center;
+
+    flex-direction: row;
+
+    justify-content: space-evenly;
+
+
+}
 
 #quesArea{
   
@@ -241,7 +258,7 @@ font-size: 15px;
 
 #tools{
 
-width:150mm;
+width:200mm;
 background-color:#d8fc3a;
 height: 12mm;
 border-radius:15px ;
@@ -341,14 +358,15 @@ let myDropdown=document.getElementById('myDropdown');
 let quesArea=document.getElementById('quesArea');
 
 
-document.getElementById('imageButton').addEventListener('click', function() {
+ function clickOnFileInput() {
         // Trigger the file input when the "Image" button is clicked
         document.getElementById('fileInput').click();
-    });
+    };
 
-    document.getElementById('fileInput').addEventListener('change', function(event) {
+    document.getElementById('fileInput').addEventListener('change', function(event)
+      { 
         const file = event.target.files[0];
-        if (file) {
+        if (file) { alert("file detedted")
             const reader = new FileReader();
             reader.onload = function(e) {
                 
@@ -360,8 +378,12 @@ document.getElementById('imageButton').addEventListener('click', function() {
                 img.style.width = '170mm';
                 
               
-               addIconS(img);
+                const quesDiv =makeEle('div',"quesDiv","2",img);
+                const quesContDiv= makeEle('div',"quesContDiv","1",quesDiv);
 
+               addDelIcon(quesContDiv)
+               addMark(quesContDiv)
+               quesArea.appendChild(quesContDiv)
                 
                
             };
@@ -369,22 +391,33 @@ document.getElementById('imageButton').addEventListener('click', function() {
         }
     })
 
-    document.getElementById('textButton').addEventListener('click', function() {
+function addQuestion(place) {
+    
         // Prompt user to input a letter
-        const letter = prompt("Enter a letter:");
+        const letter = prompt("Enter text:");
         if (letter) {
             // Create a new div to hold the text and image together in the correct order
             
-            const qText = document.createElement('p');
-            qText.innerText = letter;
- qText.setAttribute('contenteditable', 'true'); 
-            
-            addIconS(qText);
+            const qText =createTextElem(letter,'true');
+           
+ 
+            const quesDiv =makeEle('div',"quesDiv","2",qText);
 
-            //div.appendChild(p);
-              // Add text to output
+            const quesContDiv= makeEle('div',"quesContDiv","1",quesDiv);
+
+        addDelIcon(quesContDiv) ;
+        addMark(quesContDiv)
+        
+
+
+        if(place){place.appendChild(quesContDiv);}
+                else { quesArea.appendChild(quesContDiv)}
+  
+        
+
+           
         }
-    });
+    };
 
     function deleteText(textItem) {
             textItem.remove();
@@ -392,62 +425,46 @@ document.getElementById('imageButton').addEventListener('click', function() {
 
 
 
-function addIconS(item){
-
-
-
-
-    const quesContDiv = document.createElement('div');
-    const quesDiv =document.createElement('div');
-    const iconDiv=document.createElement('div');
-    const markDiv=document.createElement('div');
+function addDelIcon(placeForIcon){
     
 
-                quesContDiv.classList.add('quesContDiv');
-                quesDiv.classList.add('quesDiv');
-                markDiv.classList.add('markDiv');
-               
-                quesDiv.appendChild(item);
-               quesContDiv.appendChild(quesDiv);
-               
-                
-                 const deleteIcon = document.createElement('i');
-                 const deleteIcon2 = document.createElement('i');
-                deleteIcon.classList.add('fa');
-                deleteIcon.classList.add('fa-trash');
-                iconDiv.appendChild(deleteIcon);
-                deleteIcon2.classList.add('fa');
-                deleteIcon2.classList.add('fa-trash');
-                markDiv.appendChild(deleteIcon2);
-                quesContDiv.appendChild(iconDiv);
-                
+    const deleteIcon = makeEle('i','fa','fa-trash');
+    deleteIcon.onclick = () => deleteText(placeForIcon);
+    //const deleteIcon2 =makeEle('i','fa','fa-trash');
 
 
+    
+    
+    const iconDiv=makeEle('div',"allDelI","3",deleteIcon);
+   
+    placeForIcon.appendChild(iconDiv);
                
                 
+                
+    
 
-                const markText = document.createElement('p');
-                const markNo = document.createElement('p');
-            markText.innerText = "Marks";
-            markNo.setAttribute('contenteditable', 'true'); 
-            markNo.innerText="2";
-            markText.classList.add('markText'); 
-            markDiv.appendChild(markNo);
-            markDiv.appendChild(markText);
             
-                quesContDiv.append(markDiv);
                 
                
 
                // deleteButton.textContent = '&#xf014';
-                deleteIcon.onclick = () => deleteText(quesContDiv);
-                deleteIcon2.onclick = () => deleteText(markDiv);
                
-                
-             
-                quesArea.appendChild(quesContDiv);
+                //deleteIcon2.onclick = () => deleteText(markDiv);
+            
+               
+        }
 
 
+function addMark(placeForMark){
+
+    const markDiv=makeEle('div',"markDiv","4");
+    addDelIcon(markDiv);
+
+    const markText = createTextElem("Marks",'false','markText')
+    const markNo = createTextElem('2','true');
+    markDiv.appendChild(markNo);
+            markDiv.appendChild(markText);
+            placeForMark.append(markDiv);
 
 
 }
@@ -455,9 +472,44 @@ function addIconS(item){
 
 
 
+function makeEle(type,className,className2,child){
 
 
+    const newEle = document.createElement(type);
+newEle.classList.add(className);
+if(className2){newEle.classList.add(className2)};
+if(child){newEle.appendChild(child)};
+return newEle
 
+
+}
+
+function createTextElem(text,edit,className){
+
+let newText=document.createElement('p');
+
+newText.innerText = text;
+newText.setAttribute('contenteditable', edit); 
+newText.classList.add(className) ;
+
+return newText
+
+}
+
+
+function twoDiv(){
+    const iAddTxt=makeEle("i","fa","fa-pencil");
+   
+    const text= makeEle('div',"quesContDiv","1",);
+    iAddTxt.onclick = () => addQuestion(quesContDiv) ;
+
+    const quesContDiv= makeEle('div',"multiDiv","1",iAddTxt);
+
+    addDelIcon(quesContDiv) ;
+
+    quesArea.appendChild(quesContDiv);
+
+}
 
 
 slider.addEventListener('input', () => {
