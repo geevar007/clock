@@ -329,7 +329,7 @@ font-size: 15px;
 #tools{
 
 width:100%;
-
+min-width: 210mm;
 height: 14mm;
 
  
@@ -352,7 +352,7 @@ height:27mm ;
 
 position: fixed;
 left:88%;
-top: 183px;
+top: 70px;
 color: white;
 
 
@@ -530,12 +530,7 @@ let rightPannel=document.getElementById('rightPannel');
                 img.style.width = '170mm';
                 
               
-                const quesDiv =makeEle('div',"quesDiv","2",img);
-               
-                const quesContDiv= makeEle('div',"quesContDiv","1",quesDiv);
-                addRightClikMenu(quesContDiv);
-                addMark(quesContDiv);
-               quesArea.appendChild(quesContDiv)
+                addToQuesArea(img);
                 
                
             };
@@ -552,28 +547,34 @@ function addQuestion(place) {
             
             const qText =createTextElem(letter,'true');
            
- 
-            const quesDiv =makeEle('div',"quesDiv","2",qText);
-
            
-            const quesContDiv= makeEle('div',"quesContDiv","1",quesDiv);
+            addToQuesArea(qText,place);
             
-            addRightClikMenu(quesContDiv);
-            addMark(quesContDiv);
-
-        //addDelIcon(leftPannel,quesContDiv) ;
         
-        
-
-
-        if(place){place.appendChild(quesContDiv);}
-                else { quesArea.appendChild(quesContDiv)}
-  
-        
-
-           
         }
     };
+
+
+function addToQuesArea(obj,place){
+
+
+
+    const quesDiv =makeEle('div',"quesDiv","2",obj);
+
+    const quesContDiv= makeEle('div',"quesContDiv","1",quesDiv);
+    addRightClikMenu(quesContDiv);
+
+    addMark(quesContDiv);
+
+    if(place){place.appendChild(quesContDiv);}
+                else { quesArea.appendChild(quesContDiv)}
+
+
+}
+
+
+
+
 
 
 function addRightClikMenu(place){
