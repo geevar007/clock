@@ -4,11 +4,68 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Easy Ques Paper</title>
+    <title>QustPaper</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
  
 </head>
 <body>
+    <input type="file" id="fileInput" accept="image/*">
+   
+    <div id="tools"  class="noPrint">
+        <div>
+        
+              <input type="checkbox" id="language" name="language" value="eng" onchange="checkValue()">
+              <label for="language">Malayalam</label><br>
+             
+            
+      </div>
+      
+      
+      <div>
+      
+        <label for="myDropdown">SubJect:</label>
+        <select id="myDropdown" name="options" onchange="subChange()">
+          <option value="MATHS ഗണിതം">Maths</option>
+          <option value="ENGLISH">English</option>
+          <option value="Test ടെസ്റ്റ്">Test</option> 
+        
+        </select>
+        </div>
+     
+      
+      <div class="fControl" id="fControl" style="opacity: 1;">
+
+        <input type="range" id="slider" class="slider" min="12" max="75" value="20">
+    
+        <p id="sizeDisplay" class="mousePointer">24</p>
+    
+    </div>
+      
+      
+      
+      
+      
+    <div id="printDiv"> 
+
+        <button  onclick="window.print()"><i class="fa fa-print" aria-hidden="true"></i> Print</button>
+    
+    
+    
+    </div>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+          </div>
+
+
     <div id="container" >
     <div id="a4">
 
@@ -20,79 +77,89 @@
     <h2 id="subject">MATHS</h2>
 </div> 
     <div id="nameDiv">
-<p id="sClass">Class: ....................</p>
+<p id="sClass" contenteditable="true">Class: 1 .........</p>
 <p id="sName">Name: .....................................................................</p>
 </div>
 
       
 
 </div>
-<div id="quesArea">
+<div id="quesArea"></div>
 
-
-
+</div>
 
   
 
 
+     <div id="sidePannel" >
+
+        <div id="pannelHead">
+        <i class="fa fa-home fa-lg zoom" aria-hidden="true" title="Home"  onclick="window.open('https://geevar007.github.io/clock/mySite.html')"></i>
+
+
+        <button  onclick="window.open('https://kuttipencil.in/google/')" title="മലയാളം ടൈപ്പ് ചെയാം" >മ</button>
+    </div>
+<div id="lRPannelContiner">
+<div id="leftPannel">
+
+    <button id="textButton" onclick="addQuestion()" title="Add Text"><i class="fa fa-pencil"></i> </button>
+
+    <button onclick="twoDiv()" id="splitdiv" title="Add Multi Secton"><i class="fa fa-object-group"></i></button>
+
+
+</div>
+<div id="rightPannel">
+
+    <button id="imageButton"onclick="clickOnFileInput()"title="Add Image"><i class="fa fa-image"></i> </button>
+
+    <button  onclick="changeFont()"title="Change Font"><i class="fa fa-exchange" aria-hidden="true"></i></button>
 
 
 
 </div>
-
-    </div>
-
-    <div id="tools"  class="noPrint">
-   <i class="fa fa-home fa-lg zoom" aria-hidden="true" title="Home"  onclick="window.open('https://geevar007.github.io/clock/mySite.html')"></i>
-   <button  onclick="window.open('https://kuttipencil.in/google/')" title="ടൈപ്പ് ചെയാം" >മ</button>
-        <input type="checkbox" id="language" name="language" value="eng" onchange="checkValue()">
-        <label for="language">Mal</label><br>
-       
-      
-
-<button id="textButton" onclick="addQuestion()" title="Add Text"><i class="fa fa-pencil"></i> Text</button>
-<button id="imageButton"onclick="clickOnFileInput()"title="Add Image"><i class="fa fa-image"></i> Img</button>
-<button onclick="twoDiv()" id="splitdiv" title="Add Multi Secton"><i class="fa fa-object-group"></i> Split</button>
-<input type="file" id="fileInput" accept="image/*">
-
-
-
-
-
-
-
-
-<label for="myDropdown">Sub:</label>
-<select id="myDropdown" name="options" onchange="subChange()">
-  <option value="MATHS ഗണിതം">Maths</option>
-  <option value="ENGLISH">English</option>
-  <option value="Test ]-co-£-Ww-">Test</option>
-
-</select>
-<button  onclick="changeFont()"title="Change Font"><i class="fa fa-exchange" aria-hidden="true"></i> FontCng</button>
-<button  onclick="window.print()"><i class="fa fa-print" aria-hidden="true"></i> Print</button>
-
-
-
-
-
-
-
-    </div>
-    <div class="fControl" id="fControl" style="opacity: 1;">
-
-        <input type="range" id="slider" class="slider" min="12" max="75" value="20">
-    
-        <p id="sizeDisplay" class="mousePointer">24</p>
-    
-    </div>
-
 </div>
+
+
+
+     </div>
+   
+    
+</div>
+
+<div class="context-menu" id="contextMenu">
+    <ul>
+        <li id="deleteOption">Delete</li>
+        <li id="deleteMark"> Delete Mark</li>
+    </ul>
+</div>
+
+
+
+
 
 </body>
 <style>
 
-
+.context-menu {
+            position: absolute;
+            background: white;
+            border: 1px solid #ccc;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 1000;
+        }
+        .context-menu ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .context-menu ul li {
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+        .context-menu ul li:hover {
+            background: #ddd;
+        }
 
 
     @font-face {
@@ -201,7 +268,7 @@ height:auto ;
 #nameDiv{
     margin: auto;
 width:170mm;
-height:auto;
+height:22mm;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -217,12 +284,9 @@ font-size:large;
 }
 .quesContDiv{
 
-display: flex;
-
-align-items: center;
-justify-content: space-between;
-   
-
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
 }
 .multiDiv{
@@ -253,27 +317,104 @@ font-size: 15px;
 }
 
 
+#tools,#sidePannel,.fControl{
 
+
+    background-color:#ebd9cb;
+
+
+}
 
 
 #tools{
 
-width:200mm;
-background-color:#d8fc3a;
-height: 12mm;
-border-radius:15px ;
- position: fixed;
-    top: 85%;
-    right: 13%;
+width:100%;
+
+height: 14mm;
+
+ 
     
     margin: auto;
     z-index: 3;
     display: flex;
+    position: sticky;
+  top: 0;
     justify-content: space-evenly;
     align-items: center;
 
 
 }
+#sidePannel{
+    
+
+width: 90px;
+height:27mm ;
+
+position: fixed;
+left:88%;
+top: 183px;
+color: white;
+
+
+}
+
+#pannelHead{
+    height:35px;
+background-color: #8a5817;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+
+
+}
+#lRPannelContiner{
+
+display: flex;
+
+
+
+}
+
+#lRPannelContiner button{
+
+margin: 3px;
+
+
+}
+
+
+
+
+#leftPannel,#rightPannel{
+ padding:3px;
+ padding-top: 6px;
+    margin-left:1px;
+display: flex;
+flex-direction: column;
+width:50%;
+height:100%
+
+
+}
+
+#printDiv{
+
+display:flex;
+justify-content: center;
+
+
+
+}
+
+
+
+
+
+
+
+
+
 #fileInput {
             display: none;
         }
@@ -317,20 +458,18 @@ margin-top:15px;
 
 
 .fControl {
-    padding:10px;
-    position: fixed;
-    top: 91%;
-    right: 18%;
+   
+   
     display: flex;
     justify-content: center;
-    background-color: #d8fc3a;
+    
     border-radius: 5px;
 }
 
 
 @media print {
   
-    #tools,#fControl { display: none; }
+    #tools,#fControl,#sidePannel { display: none; }
     #quesArea i {display:none;}
   .markDiv{   
     position: fixed;
@@ -345,8 +484,18 @@ margin-top:15px;
 
 <script>
 
+
+
+
+
+
+
+
     const fonts=["Arima","Anek","Chilanka","Balu","Gayathri","Gayathri-R","Gayathri-Thin","Manjari-Bold","Manjari-Regular","Manjari-Thin","Noto","Noto1"];
     let index = 0;
+    let currentDiv = null; // Store reference to the right-clicked div
+    const contextMenu = document.getElementById("contextMenu");
+
 const  veiwFontSize=document.getElementById('sizeDisplay');
 let checkbox = document.getElementById('language');
 let letterhead= document.getElementById('letterHeadContainer');
@@ -356,6 +505,9 @@ let sClass = document.getElementById('sClass');
 let sName = document.getElementById('sName');
 let myDropdown=document.getElementById('myDropdown');
 let quesArea=document.getElementById('quesArea');
+let a4=document.getElementById('a4');
+let leftPannel=document.getElementById('leftPannel');
+let rightPannel=document.getElementById('rightPannel');
 
 
  function clickOnFileInput() {
@@ -379,10 +531,10 @@ let quesArea=document.getElementById('quesArea');
                 
               
                 const quesDiv =makeEle('div',"quesDiv","2",img);
+               
                 const quesContDiv= makeEle('div',"quesContDiv","1",quesDiv);
-
-               addDelIcon(quesContDiv)
-               addMark(quesContDiv)
+                addRightClikMenu(quesContDiv);
+                addMark(quesContDiv);
                quesArea.appendChild(quesContDiv)
                 
                
@@ -403,10 +555,14 @@ function addQuestion(place) {
  
             const quesDiv =makeEle('div',"quesDiv","2",qText);
 
+           
             const quesContDiv= makeEle('div',"quesContDiv","1",quesDiv);
+            
+            addRightClikMenu(quesContDiv);
+            addMark(quesContDiv);
 
-        addDelIcon(quesContDiv) ;
-        addMark(quesContDiv)
+        //addDelIcon(leftPannel,quesContDiv) ;
+        
         
 
 
@@ -419,52 +575,52 @@ function addQuestion(place) {
         }
     };
 
-    function deleteText(textItem) {
-            textItem.remove();
-        }
+
+function addRightClikMenu(place){
 
 
 
-function addDelIcon(placeForIcon){
-    
-
-    const deleteIcon = makeEle('i','fa','fa-trash');
-    deleteIcon.onclick = () => deleteText(placeForIcon);
-    //const deleteIcon2 =makeEle('i','fa','fa-trash');
-
-
-    
-    
-    const iconDiv=makeEle('div',"allDelI","3",deleteIcon);
-   
-    placeForIcon.appendChild(iconDiv);
-               
+    place.addEventListener("contextmenu", function (event) {
+                event.preventDefault(); // Prevent default right-click menu
                 
+                currentDiv = this; // Store reference to clicked div
                 
+                // Position context menu at mouse click position
+                contextMenu.style.left = `${event.pageX}px`;
+                contextMenu.style.top = `${event.pageY}px`;
+                contextMenu.style.display = "block";
+            });
+
+
+
+
+
+
+
+
+
+
+}
+
+
+
+
     
 
-            
-                
-               
 
-               // deleteButton.textContent = '&#xf014';
-               
-                //deleteIcon2.onclick = () => deleteText(markDiv);
-            
-               
-        }
+
 
 
 function addMark(placeForMark){
 
     const markDiv=makeEle('div',"markDiv","4");
-    addDelIcon(markDiv);
+    
 
     const markText = createTextElem("Marks",'false','markText')
     const markNo = createTextElem('2','true');
     markDiv.appendChild(markNo);
             markDiv.appendChild(markText);
-            placeForMark.append(markDiv);
+            placeForMark.appendChild(markDiv);
 
 
 }
@@ -500,14 +656,15 @@ return newText
 function twoDiv(){
     const iAddTxt=makeEle("i","fa","fa-pencil");
    
-    const text= makeEle('div',"quesContDiv","1",);
-    iAddTxt.onclick = () => addQuestion(quesContDiv) ;
+    
 
-    const quesContDiv= makeEle('div',"multiDiv","1",iAddTxt);
+    iAddTxt.onclick = () => addQuestion(multiDiv) ;
 
-    addDelIcon(quesContDiv) ;
+    const multiDiv= makeEle('div',"multiDiv","1",iAddTxt);
 
-    quesArea.appendChild(quesContDiv);
+   addRightClikMenu(multiDiv);
+
+    quesArea.appendChild(multiDiv);
 
 }
 
@@ -563,7 +720,7 @@ function subChange() {
 function checkValue() {
     if (checkbox.checked) {
        
-        sClass.innerHTML = "ക്ലാസ്: ....................";
+        sClass.innerHTML = "ക്ലാസ്: 1 .........";
         sName.innerHTML = "പേര്: ......................................................................";
         heading.innerHTML = "മാസാന്ത്യ മൂല്യനിർണയം";
         convertMark("മാർക്ക്");
@@ -578,7 +735,7 @@ function checkValue() {
 function convertToEnglish() {
     subject.innerHTML = "ENGLISH";  // Set subject to English
    
-    sClass.innerHTML = "Class: ....................";
+    sClass.innerHTML = "Class: 1 .........";
     sName.innerHTML = "Name: .....................................................................";
     heading.innerHTML = "Monthly Assessment";
     convertMark("Marks");
@@ -597,10 +754,35 @@ function convertMark(x) {
    
 
 function changeFont() {
-            document.body.style.fontFamily = fonts[index];
+            a4.style.fontFamily = fonts[index];
             index = (index + 1) % fonts.length; 
            
         }
+
+        document.addEventListener("click", function () {
+            contextMenu.style.display = "none";
+        });
+
+
+        document.getElementById("deleteOption").addEventListener("click", function () {
+            if (currentDiv) {
+                currentDiv.remove();
+                contextMenu.style.display = "none";
+            }
+        });
+
+
+        document.getElementById("deleteMark").addEventListener("click", function () {
+            if (currentDiv) {
+                currentDiv.children[1].remove();
+
+                
+
+
+                contextMenu.style.display = "none";
+            }
+        });
+
 
 
 </script>
