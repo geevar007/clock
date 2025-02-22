@@ -12,6 +12,13 @@
     <input type="file" id="fileInput" accept="image/*">
    
     <div id="tools"  class="noPrint">
+
+
+
+
+        <i class="fa fa-home fa-lg zoom" aria-hidden="true" title="Home"  onclick="window.open('https://geevar007.github.io/clock/mySite.html')"></i>
+
+        <button  onclick="window.open('https://kuttipencil.in/google/')" title="മലയാളം ടൈപ്പ് ചെയാം" >അ</button>
         <div>
         
               <input type="checkbox" id="language" name="language" value="eng" onchange="checkValue()">
@@ -38,18 +45,25 @@
         <input type="range" id="slider" class="slider" min="12" max="75" value="20">
     
         <p id="sizeDisplay" class="mousePointer">24</p>
+        <button  id="fontMonitor" onclick="changeFont()"title="Change Font"><i class="fa fa-exchange" aria-hidden="true"> </i> Font Change</button>
     
     </div>
-      
-      
-      
+     <div>
+    <button id="textButton" onclick="addQuestion()" title="Add Question"><i class="fa fa-pencil"></i> Add Question</button>
+    <button id="imageButton"onclick="clickOnFileInput()"title="Add Image"><i class="fa fa-image"></i> Add Image</button>
+   
+</div> 
+
+
+
+    
       
       
     <div id="printDiv"> 
 
-        <button  onclick="window.print()"><i class="fa fa-print" aria-hidden="true"></i> Print</button>
+        <button  onclick="window.print()"><img id="printB" src="https://geevar007.github.io/glog/print.png" alt="Print" style="width: 42px; height: 42px; opacity: 1;" title="Print" ></button>
     
-    
+        
     
     </div>
       
@@ -88,51 +102,17 @@
 
 </div>
 
-  
-
-
-     <div id="sidePannel" >
-
-        <div id="pannelHead">
-        <i class="fa fa-home fa-lg zoom" aria-hidden="true" title="Home"  onclick="window.open('https://geevar007.github.io/clock/mySite.html')"></i>
-
-
-        <button  onclick="window.open('https://kuttipencil.in/google/')" title="മലയാളം ടൈപ്പ് ചെയാം" >മ</button>
-    </div>
-<div id="lRPannelContiner">
-<div id="leftPannel">
-
-    <button id="textButton" onclick="addQuestion()" title="Add Text"><i class="fa fa-pencil"></i> </button>
-
-    <button onclick="twoDiv()" id="splitdiv" title="Add Multi Secton"><i class="fa fa-object-group"></i></button>
-
-
-</div>
-<div id="rightPannel">
-
-    <button id="imageButton"onclick="clickOnFileInput()"title="Add Image"><i class="fa fa-image"></i> </button>
-
-    <button  onclick="changeFont()"title="Change Font"><i class="fa fa-exchange" aria-hidden="true"></i></button>
-
-
-
-</div>
-</div>
-
-
-
-     </div>
+ 
    
     
 </div>
 
 <div class="context-menu" id="contextMenu">
     <ul>
-        <li id="deleteOption">Delete</li>
-        <li id="deleteMark"> Delete Mark</li>
+        <li id="deleteOption">Delete all</li>
+        <li id="deleteMark"> Delete mark</li>
     </ul>
 </div>
-
 
 
 
@@ -221,17 +201,38 @@
 
   
 
+#printB{
+margin:0;
+    }
 
+
+i,input,select{
+
+cursor: pointer;
+
+
+}
 
     button{
-height: 20px;
+margin-left:13px;
+transition-duration: 0.4s;
+    background-color: rgb(255, 253, 253);
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 14px;
+    cursor: pointer;
 
     }
+    button:hover,i {
+    transform: scale(1.2);
+    transition-duration: 0.3s;}
     body{
 margin:0px;
 font-family: Noto1;
 
     }
+  
 #container{
     margin:0px;
  width:100%;
@@ -260,7 +261,7 @@ padding-top:10mm;
 width:170mm ;
 
 height:auto ;
-
+cursor:default;
  
  
 }
@@ -289,17 +290,7 @@ font-size:large;
     justify-content: space-between;
 
 }
-.multiDiv{
 
-    display: flex;
-    align-items: center;
-
-    flex-direction: row;
-
-    justify-content: space-evenly;
-
-
-}
 
 #quesArea{
   
@@ -317,10 +308,10 @@ font-size: 15px;
 }
 
 
-#tools,#sidePannel,.fControl{
+#tools,.fControl{
 
 
-    background-color:#ebd9cb;
+    background-color:#ffbf11;
 
 
 }
@@ -338,78 +329,12 @@ height: 14mm;
     z-index: 3;
     display: flex;
     position: sticky;
-  top: 0;
+    top: 0;
     justify-content: space-evenly;
     align-items: center;
 
 
 }
-#sidePannel{
-    
-
-width: 90px;
-height:27mm ;
-
-position: fixed;
-left:88%;
-top: 70px;
-color: white;
-
-
-}
-
-#pannelHead{
-    height:35px;
-background-color: #8a5817;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-
-
-
-}
-#lRPannelContiner{
-
-display: flex;
-
-
-
-}
-
-#lRPannelContiner button{
-
-margin: 3px;
-
-
-}
-
-
-
-
-#leftPannel,#rightPannel{
- padding:3px;
- padding-top: 6px;
-    margin-left:1px;
-display: flex;
-flex-direction: column;
-width:50%;
-height:100%
-
-
-}
-
-#printDiv{
-
-display:flex;
-justify-content: center;
-
-
-
-}
-
-
-
-
 
 
 
@@ -423,7 +348,7 @@ h2,#letterhead p{
     margin:0px;
 }
 
-.quesContDiv p,.quesContDiv i{
+.quesContDiv p{
 
 margin:7px;
 
@@ -433,10 +358,6 @@ margin-top: 24px;
 }
 .quesContDiv {
     font-size: 24px;}
-
-#quesArea i{
-font-size: 16px;
-color: #ff0d0d39;}
 
 
 .qusDiv{
@@ -458,18 +379,18 @@ margin-top:15px;
 
 
 .fControl {
-   
-   
-    display: flex;
-    justify-content: center;
-    
-    border-radius: 5px;
+   width:50mm;
+   display: flex;
+    justify-content: space-around;
+
+    align-items: center;
+
 }
 
 
 @media print {
   
-    #tools,#fControl,#sidePannel { display: none; }
+    #tools,#fControl { display: none; }
     #quesArea i {display:none;}
   .markDiv{   
     position: fixed;
@@ -485,17 +406,11 @@ margin-top:15px;
 <script>
 
 
-
-
-
-
-
-
     const fonts=["Arima","Anek","Chilanka","Balu","Gayathri","Gayathri-R","Gayathri-Thin","Manjari-Bold","Manjari-Regular","Manjari-Thin","Noto","Noto1"];
     let index = 0;
     let currentDiv = null; // Store reference to the right-clicked div
     const contextMenu = document.getElementById("contextMenu");
-
+const deleteMark=document.getElementById("deleteMark");
 const  veiwFontSize=document.getElementById('sizeDisplay');
 let checkbox = document.getElementById('language');
 let letterhead= document.getElementById('letterHeadContainer');
@@ -508,14 +423,14 @@ let quesArea=document.getElementById('quesArea');
 let a4=document.getElementById('a4');
 let leftPannel=document.getElementById('leftPannel');
 let rightPannel=document.getElementById('rightPannel');
-
+let fontMonitor=document.getElementById("fontMonitor");
 
  function clickOnFileInput() {
         // Trigger the file input when the "Image" button is clicked
         document.getElementById('fileInput').click();
     };
 
-    document.getElementById('fileInput').addEventListener('change', function(event)
+document.getElementById('fileInput').addEventListener('change', function(event)
       { 
         const file = event.target.files[0];
         if (file) { 
@@ -538,7 +453,7 @@ let rightPannel=document.getElementById('rightPannel');
         }
     })
 
-function addQuestion(place) {
+function addQuestion() {
     
         // Prompt user to input a letter
         const letter = prompt("Enter text:");
@@ -548,14 +463,14 @@ function addQuestion(place) {
             const qText =createTextElem(letter,'true');
            
            
-            addToQuesArea(qText,place);
+            addToQuesArea(qText);
             
         
         }
     };
 
 
-function addToQuesArea(obj,place){
+function addToQuesArea(obj){
 
 
 
@@ -564,16 +479,17 @@ function addToQuesArea(obj,place){
     const quesContDiv= makeEle('div',"quesContDiv","1",quesDiv);
     addRightClikMenu(quesContDiv);
 
-    addMark(quesContDiv);
+    const markNo = createTextElem('2','true');
+    const markDiv=makeEle('div',"markDiv","4",markNo);
+    const markText = createTextElem("Marks",'false','markText')
+  
+            markDiv.appendChild(markText);
+            quesContDiv.appendChild(markDiv);
 
-    if(place){place.appendChild(quesContDiv);}
-                else { quesArea.appendChild(quesContDiv)}
+                quesArea.appendChild(quesContDiv)
 
 
 }
-
-
-
 
 
 
@@ -585,47 +501,15 @@ function addRightClikMenu(place){
                 event.preventDefault(); // Prevent default right-click menu
                 
                 currentDiv = this; // Store reference to clicked div
-                
+                 
+               if(currentDiv.children.length!=2){  deleteMark.style.display="none";    }
+               else{ deleteMark.style.display="block";}
                 // Position context menu at mouse click position
                 contextMenu.style.left = `${event.pageX}px`;
                 contextMenu.style.top = `${event.pageY}px`;
                 contextMenu.style.display = "block";
-            });
-
-
-
-
-
-
-
-
-
-
-}
-
-
-
-
-    
-
-
-
-
-
-function addMark(placeForMark){
-
-    const markDiv=makeEle('div',"markDiv","4");
-    
-
-    const markText = createTextElem("Marks",'false','markText')
-    const markNo = createTextElem('2','true');
-    markDiv.appendChild(markNo);
-            markDiv.appendChild(markText);
-            placeForMark.appendChild(markDiv);
-
-
-}
-
+               
+     })}
 
 
 
@@ -654,20 +538,6 @@ return newText
 }
 
 
-function twoDiv(){
-    const iAddTxt=makeEle("i","fa","fa-pencil");
-   
-    
-
-    iAddTxt.onclick = () => addQuestion(multiDiv) ;
-
-    const multiDiv= makeEle('div',"multiDiv","1",iAddTxt);
-
-   addRightClikMenu(multiDiv);
-
-    quesArea.appendChild(multiDiv);
-
-}
 
 
 slider.addEventListener('input', () => {
@@ -690,12 +560,9 @@ slider.addEventListener('input', () => {
 
 
     markP.forEach(cell => {
-        cell.style.fontSize = fontSize-10+ 'px';
+        cell.style.fontSize = fontSize-8+ 'px';
     });
 });
-
-
-
 
 
 function subChange() {
@@ -756,16 +623,18 @@ function convertMark(x) {
 
 function changeFont() {
             a4.style.fontFamily = fonts[index];
+fontMonitor.title="Current Font: "+fonts[index];
+         
             index = (index + 1) % fonts.length; 
            
         }
 
-        document.addEventListener("click", function () {
+ document.addEventListener("click", function () {
             contextMenu.style.display = "none";
         });
 
 
-        document.getElementById("deleteOption").addEventListener("click", function () {
+document.getElementById("deleteOption").addEventListener("click", function () {
             if (currentDiv) {
                 currentDiv.remove();
                 contextMenu.style.display = "none";
@@ -773,7 +642,7 @@ function changeFont() {
         });
 
 
-        document.getElementById("deleteMark").addEventListener("click", function () {
+deleteMark.addEventListener("click", function () {
             if (currentDiv) {
                 currentDiv.children[1].remove();
 
