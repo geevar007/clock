@@ -4,22 +4,21 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QustPaper</title>
+    <title>EasyQuesPaper</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
- 
-</head>
+   </head>
 <body>
     <input type="file" id="fileInput" accept="image/*">
    
-    <div id="tools"  class="noPrint">
+    <div id="tools"  class="row">
 
 
 
 
         <i class="fa fa-home fa-lg zoom" aria-hidden="true" title="Home"  onclick="window.open('https://geevar007.github.io/clock/mySite.html')"></i>
 
-        <button  onclick="window.open('https://kuttipencil.in/google/')" title="മലയാളം ടൈപ്പ് ചെയാം" >അ</button>
-        <div>
+        <button  onclick="window.open('https://kuttipencil.in/google/')" title="മലയാളം ടൈപ്പ് ചെയാം" class="col-xs-4">അ</button>
+        <div >
         
               <input type="checkbox" id="language" name="language" value="eng" onchange="checkValue()">
               <label for="language">Malayalam</label><br>
@@ -34,13 +33,13 @@
         <select id="myDropdown" name="options" onchange="subChange()">
           <option value="MATHS ഗണിതം">Maths</option>
           <option value="ENGLISH">English</option>
-          <option value="Test ടെസ്റ്റ്">Test</option> 
+          <option value="Check✔ ടെസ്റ്റ്✔">Check</option> 
         
         </select>
         </div>
      
       
-      <div class="fControl" id="fControl" style="opacity: 1;">
+      <div class="fControl col-xs-4" id="fControl" style="opacity: 1;">
 
         <input type="range" id="slider" class="slider" min="12" max="75" value="20">
     
@@ -113,6 +112,10 @@
         <li id="deleteMark"> Delete mark</li>
     </ul>
 </div>
+
+
+
+
 
 
 
@@ -305,10 +308,11 @@ text-align: center;
 display:flex;
 font-size: 15px;
 
+
 }
 
 
-#tools,.fControl{
+#tools,.fControl,#mobileTools{
 
 
     background-color:#ffbf11;
@@ -356,16 +360,17 @@ margin-left:3px;
 margin-top: 24px;
 
 }
-.quesContDiv {
-    font-size: 24px;}
 
 
-.qusDiv{
+
+.quesDiv{
 
 display:flex;
 
 justify-content:space-between;
 
+max-width: 160mm;
+font-size: 24px;
 
 }
 
@@ -390,15 +395,26 @@ margin-top:15px;
 
 @media print {
   
-    #tools,#fControl { display: none; }
-    #quesArea i {display:none;}
-  .markDiv{   
-    position: fixed;
-    right: 1cm;}
+    #tools,#fControl,#mobileTools { display: none; }
+   
+  .markDiv{ position: fixed;
+    right: 10mm;}
 
 }
 
 
+
+#mobileTools{
+
+
+
+width:210mm;
+height:50mm;
+
+
+
+
+}
 
 </style>
 
@@ -460,7 +476,7 @@ function addQuestion() {
         if (letter) {
             // Create a new div to hold the text and image together in the correct order
             
-            const qText =createTextElem(letter,'true');
+            const qText =createTextElem(letter,'true',"questionText");
            
            
             addToQuesArea(qText);
