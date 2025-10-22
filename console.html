@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Light Control + Sensor Display</title>
+  <!-- Firebase SDKs (compat version) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      text-align: center;
+      padding: 40px;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    .display-screen {
+      background: #fff;
+      width: 350px;
+      margin: 30px auto 30px auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: left;
+    }
+
+    .display-screen h3 {
+      margin: 0 0 10px 0;
+      font-size: 22px;
+    }
+
+    .sensor-value {
+      font-size: 18px;
+      margin: 8px 0;
+    }
+
+    .refresh-btn {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 8px 16px;
+      font-size: 16px;
+      background: #2196F3;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .refresh-btn:hover {
+      background: #1976D2;
+    }
+
+    .switch-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    .label-text {
+      font-size: 20px;
+      margin-right: 15px;
+      width: 100px;
+      text-align: right;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #4CAF50;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+
+    #console {
+      margin-top: 40px;
+      background-color: #fff;
+      padding: 20px;
+      width: 450px;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      text-align: left;
+      font-size: 16px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .log-entry {
+      margin: 5px 0;
+      padding: 4px;
+      border-bottom: 1px solid #eee;
+    }
+
+.gauge {
+      position: relative;
+      width: 250px;
+      height: 140px;
+      background: #fff;
+      border-top-left-radius: 250px;
+      border-top-right-radius: 250px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      overflow: hidden;
+    }
+
+    .label {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .needle {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 4px;
+      height: 100px;
+      background: red;
+      transform-origin: bottom center;
+      transform: rotate(-90deg);
+      transition: transform 0.5s ease-in-out;
+      z-index: 2;
+    }
+
+    .center-dot {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 14px;
+      height: 14px;
+      background: black;
+      border-radius: 50%;
+      transform: translate(-50%, 50%);
+      z-index: 3;
+    }
+
+    .ticks {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    .tick {
+      position: absolute;
+      width: 2px;
+      height: 10px;
+      background: #000;
+      bottom: 0;
+      left: 50%;
+      transform-origin: bottom center;
+    }
+.meterBox{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+
+
+  </style>
+</head>
+<body>
+
+  <h2>💡 Light & Sensor Control Panel</h2>
+
+<div class="meterBox">
+
+
+ 
+ <!-- Temperature Gauge -->
+  <div class="gauge" id="tempGauge">
+    <div class="ticks" id="tempTicks"></div>
+    <div class="needle" id="tempNeedle"></div>
+    <div class="center-dot"></div>
+    <div class="label">Temperature (°C)</div>
+  </div>
+
+  <!-- Humidity Gauge -->
+  <div class="gauge" id="humidityGauge">
+    <div class="ticks" id="humidityTicks"></div>
+    <div class="needle" id="humidityNeedle"></div>
+    <div class="center-dot"></div>
+    <div class="label">Humidity (%)</div>
+  </div>
+
+
+
+
+
+
+</div>
+
+  <!-- Display Screen -->
+  <div class="display-screen">
+    <h3>Current Sensor Values</h3>
+    <div class="sensor-value">Temperature: <span id="tempValue">--</span> °C</div>
+    <div class="sensor-value">Humidity: <span id="humValue">--</span> %</div>
+    <button class="refresh-btn" onclick="refreshSensorValues()">Refresh</button>
+  </div>
+
+  <!-- Light Toggles -->
+  <div class="switch-container">
+    <span class="label-text">Light 1</span>
+    <label class="switch">
+      <input type="checkbox" id="light1" onchange="switchChanged(this)">
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <div class="switch-container">
+    <span class="label-text">Light 2</span>
+    <label class="switch">
+      <input type="checkbox" id="light2" onchange="switchChanged(this)">
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <div class="switch-container">
+    <span class="label-text">Light 3</span>
+    <label class="switch">
+      <input type="checkbox" id="light3" onchange="switchChanged(this)">
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <div class="switch-container">
+    <span class="label-text">Light 4</span>
+    <label class="switch">
+      <input type="checkbox" id="light4" onchange="switchChanged(this)">
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <!-- Log Console -->
+  <div id="console">
+    <strong>📝 Log:</strong>
+    <div id="logArea"></div>
+  </div>
+
+  <script>
+    // 🔧 Replace with your Firebase project config
+    const firebaseConfig = {
+
+ apiKey: "AIzaSyAn2MY7EJBx6bBwE9HFq8f4eeIkQ-0rWKw",
+    authDomain: "first-iot-007.firebaseapp.com",
+    databaseURL: "https://first-iot-007-default-rtdb.firebaseio.com",
+    projectId: "first-iot-007",
+    storageBucket: "first-iot-007.firebasestorage.app",
+    messagingSenderId: "671265666933",
+    appId: "1:671265666933:web:c7d4f463a6bacac141853c",
+    measurementId: "G-961P1TEKVK"
+};
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+
+const switchIds = ['light1', 'light2', 'light3', 'light4'];
+
+  switchIds.forEach(id => {
+    const checkbox = document.getElementById(id);
+    const dbRef = db.ref('lights/' + id);
+
+    // Set initial state from Firebase
+    dbRef.on('value', snapshot => {
+      const value = snapshot.val();
+      checkbox.checked = value == true;
+    });})
+
+
+
+    // Toggle Light Switch
+    function switchChanged(element) {
+      const lightId = element.id;
+      const state = element.checked ? true : false;
+      db.ref("lights/" + lightId).set(state)
+        .then(() => {
+          logMessage(`${lightId} set to ${state}`);
+        })
+        .catch(error => {
+          logMessage(`❌ Error updating ${lightId}: ${error.message}`);
+        });
+    }
+
+    // Refresh Humidity & Temperature
+    function refreshSensorValues() {
+      db.ref("sensors/temperature").once('value')
+        .then(snapshot => {
+          const temp = snapshot.val();
+          document.getElementById("tempValue").textContent = temp ?? "--";
+          logMessage(`Temperature refreshed: ${temp}`);
+        });
+
+      db.ref("sensors/humidity").once('value')
+        .then(snapshot => {
+          const hum = snapshot.val();
+          document.getElementById("humValue").textContent = hum ?? "--";
+          logMessage(`Humidity refreshed: ${hum}`);
+        });
+    }
+
+    // Auto-refresh on load
+    window.onload = function() {
+      refreshSensorValues();
+    };
+
+    // Logging
+    function logMessage(message) {
+      const logArea = document.getElementById("logArea");
+      const time = new Date().toLocaleTimeString();
+      const entry = document.createElement("div");
+      entry.className = "log-entry";
+      entry.textContent = `[${time}] ${message}`;
+      logArea.prepend(entry);
+    }
+
+
+ function createTicks(containerId, divisions, startAngle, endAngle) {
+      const container = document.getElementById(containerId);
+      for (let i = 0; i <= divisions; i++) {
+        const tick = document.createElement("div");
+        tick.classList.add("tick");
+        const angle = startAngle + (i / divisions) * (endAngle - startAngle);
+        tick.style.transform = `rotate(${angle}deg) translateY(-100px)`;
+        container.appendChild(tick);
+      }
+    }
+
+    // Create tick marks
+    createTicks("tempTicks", 10, -90, 90);      // For temperature: 0°C - 50°C
+    createTicks("humidityTicks", 10, -90, 90);  // For humidity: 0% - 100%
+
+    // Function to set needle angle based on value
+    function setGaugeValue(value, min, max, needleId) {
+      const clamped = Math.max(min, Math.min(value, max));
+      const angle = ((clamped - min) / (max - min)) * 180 - 90;
+      document.getElementById(needleId).style.transform = `rotate(${angle}deg)`;
+    }
+
+    // Initial needle values
+    setGaugeValue(22, 0, 50, "tempNeedle");      // Temperature: 22°C
+    setGaugeValue(65, 0, 100, "humidityNeedle"); // Humidity: 65%
+
+    // Global setters
+    window.setTemperature = (val) => setGaugeValue(val, 0, 50, "tempNeedle");
+    window.setHumidity = (val) => setGaugeValue(val, 0, 100, "humidityNeedle");
+
+
+
+  </script>
+</body>
+</html>
