@@ -1,0 +1,266 @@
+
+   <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tray Finder</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    a{
+
+cursor: pointer;
+
+    }
+    h3{
+cursor:default;
+
+    }
+
+    .container {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 320px;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+   
+    input {
+      text-align: center;
+      margin: 8px 0;
+      padding: 8px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      
+      padding: 10px;
+      margin-top: 10px;
+      margin-right: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+#resultContainer{
+margin-top: 15px;
+display: flex;
+align-items: center;
+    justify-content: center;
+
+
+
+}
+    #result {
+        margin-left:5px;
+display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+        height: auto;
+        width:65% ;
+background-color: rgb(239, 243, 243);
+    
+      font-size: 36px;
+      font-weight: normal;
+      color:white;
+      min-height: 24px;
+    }
+
+#sticker{
+display: flex;
+align-items: center;
+    justify-content: center;
+    font-size:30px;
+    color:blue;
+    width: 1.2cm;
+    height: 2cm;
+    background-color: rgb(255, 255, 255);
+    border: .1cm solid rgb(236, 87, 87);
+
+
+
+}
+
+
+#inputContainer{
+
+    display: flex;
+
+    justify-content: center;
+    align-content: space-around;
+    flex-wrap: wrap;
+    align-items: baseline;
+}
+
+
+
+#buttonContainer{
+
+
+    display: flex;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    
+    <h3>Tray Finder</h3>
+
+<div id="resultContainer">
+<div id="sticker"></div>
+ <div id="result"></div>
+
+
+</div>
+    
+ <div id="inputContainer">
+    <input type="text" id="alpha" placeholder="C" maxlength="1" style="width:20px;margin-right:5px">
+   
+    <input type="number" id="serial" placeholder="xxxx"style="width:80px;margin-right:5px">
+     <button onclick="searchTray()" >Search</button> <a onclick="clearBrowserMemory()">🔄</a>
+    </div>
+
+   
+
+  </div>
+
+  <script>
+    // 🔗 Replace this with your published Google Sheet CSV link
+       const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQNyxe_pU5VzOAAH7WFVJrcJOSgk86FH2ya_8P0zZdS88bJY4epQHTMXIxh7MHLqsG51suledVueigC/pub?gid=0&single=true&output=csv"; 
+
+    async function getCSVData() {
+      // 1️⃣ Check browser memory first
+      const cached = localStorage.getItem("trayData");
+      if (cached) {
+        try {
+          return JSON.parse(cached);
+        } catch {
+          localStorage.removeItem("trayData");
+        }
+      }
+
+      // 2️⃣ If not cached, fetch from Google Sheets
+      const response = await fetch(CSV_URL);
+      const text = await response.text();
+      const parsed = parseCSV(text);
+
+      // 3️⃣ Store in browser memory
+      localStorage.setItem("trayData", JSON.stringify(parsed));
+
+      return parsed;
+    }
+
+    function parseCSV(csv) {
+      const rows = csv.trim().split("\n").map(r => r.split(","));
+      rows.shift(); // remove header
+      return rows.map(row => ({
+        code: row[0].trim(),
+        start: parseInt(row[1]),
+        end: parseInt(row[2]),
+        trayNumber: row[3].trim(),
+        trayDesc: row[4].trim()
+      }));
+    }
+
+    async function searchTray() {
+      const alpha = document.getElementById("alpha").value.trim().toUpperCase();
+      const serial = parseInt(document.getElementById("serial").value);
+      const resultDiv = document.getElementById("result");
+      const sticker= document.getElementById("sticker");
+
+      resultDiv.textContent = "";
+
+      if (!alpha || isNaN(serial)) {
+        resultDiv.textContent = "⚠️ Please enter both code and number.";
+        return;
+      }
+
+      resultDiv.textContent = "🔍 Searching...";
+
+      try {
+        const data = await getCSVData();
+        const found = data.find(row =>
+          row.code === alpha && serial >= row.start && serial <= row.end
+        );
+
+        if (found) {
+          resultDiv.textContent = ` ${found.trayDesc} `;
+        sticker.textContent = `${found.trayNumber}` ;
+        
+        
+  const code = found.trayDesc.trim().toUpperCase();
+
+
+         let color = "";
+  if (code === "B" ) {
+    color = "blue";
+  } else if (code === "R" || code === "RS") {
+    color = "red";
+  } else if (code === "O" || code === "OS") {
+    color = "orange";
+  } 
+  else if (code === "BL") {
+    color = "#9595cd";
+  }
+
+else if (code==="RL"){
+
+color="#f39595"
+
+}
+
+
+  
+   else {
+    color = "black";}
+        
+    resultDiv.style.backgroundColor = color;
+        
+      
+        
+        } 
+        else {
+          resultDiv.textContent = "❌ No match found.";
+        }
+      } catch (error) {
+        console.error(error);
+        resultDiv.textContent = "⚠️ Error loading data. Check your sheet link.";
+      }
+    }
+
+
+ function clearBrowserMemory() {
+   
+      localStorage.removeItem("trayData"); // remove only tray data
+    
+  }
+
+
+  </script>
+</body>
+</html>
