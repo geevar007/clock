@@ -1,13 +1,23 @@
 const fileInput = document.getElementById("excel-file");
-    var resultArr=[];
+  
+var resultArr=[];
     const pName=[];
     const hName=[];
     const hNo=[];
     const mNo=[];
     const rName=[];
-    const  datas=[1,pName,rName,hNo,hName,mNo]
+    const  datas=[1,pName,rName,hNo,hName,mNo];
+    const hDatas=[1,pName,hName];
     var tHeader=[ "No","Name","Relative","HNo","House","Mob:" ]
- 
+
+    var modal = document.getElementById("myModal");
+    var modalContent= document.getElementById("modal-content");
+    var modalHeading=document.getElementById("houseNumber")
+    var openBtn = document.getElementById("openBtn");
+    var closeBtn = document.getElementsByClassName("close")[0];
+    var userInput = document.getElementById("userInput");
+    var displayText = document.getElementById("displayText");
+
     const newInputDiv=document.getElementById("newInputDiv");
     const homeDiv=document.getElementById("home");
     const welcomeDiv=document.getElementById("welcome");
@@ -26,18 +36,26 @@ const fileInput = document.getElementById("excel-file");
     
     function keyPressed(keyName){ 
       inputHome.value=null;
-      closeAllLists();
+      closeAllLists("result-table");
+      counter.innerHTML= ""
       var arr= getSelectedArray();
       if(keyName=="s"){
       var val = inputBox.value;
-       
-        
+       if(!val) {return false }
+        if (val.length>1){console.log("no need off search all")
+
+
+
+
+
+
+        }
        // const file = fileInput.files[0]; 
-        if(!val) {return false }
+        
         
        
         
-        var a = makeTableForOutPut()
+        var outPutTable = makeTableForOutPut(mainDiv,"result-table")
        
        var totalFound=0;
        resultArr=[];
@@ -48,10 +66,8 @@ const fileInput = document.getElementById("excel-file");
            
                            resultArr.push(i);
 
-                         //if(inputHome.value){}
-                          
-                         //else{
-                           totalFound++; createOutput (a,i,totalFound); }        //  }
+                        
+                           totalFound++; createOutput (outPutTable,i,totalFound,datas); }        //  }
                 }
                           }
                         
@@ -73,11 +89,12 @@ const fileInput = document.getElementById("excel-file");
 
 function subSearch(){
   if(!inputBox.value) { return false }
-  closeAllLists(); 
+  closeAllLists("result-table"); 
+  counter.innerHTML= ""
 
      var totalFound = 0;
      var val2=inputHome.value;
-     var a =  makeTableForOutPut();
+     var a =  makeTableForOutPut(mainDiv,"result-table");
     
 
      resultArr.forEach(function (element) {
@@ -89,48 +106,35 @@ function subSearch(){
  
         if(val2 && arr2[element].substr(0,val2.length).toUpperCase()==val2.toUpperCase()){
           totalFound++;
-          createOutput (a,element,totalFound); }// if same text find end
+          createOutput (a,element,totalFound,datas); }// if same text find end
 
 if(!val2){keyPressed("s")}
      })// forEach result arr End 
                     }// sub search end heare
 
-function makeTableForOutPut(){
+function makeTableForOutPut(place,className){
 
   var table = document.createElement("table");
+   var tbody=document.createElement('tbody');
   
-  table.setAttribute("class", "autocomplete-items");
-  //var theader = document.createElement('thead');
-    //var headerRow = document.createElement('tr');
-  var tbody=document.createElement('tbody');
-  
-  mainDiv.appendChild(table);
-
- 
-
- // tHeader.forEach(element=> {
-  //  var th = document.createElement('th');
-
-  //  th.textContent = element;
-  //  headerRow.appendChild(th);})
-
-
-//theader.appendChild(headerRow);
-//table.appendChild(theader);
-table.appendChild(tbody);
+  table.setAttribute("class", className);
+  place.appendChild(table);
+  table.appendChild(tbody);
   return tbody;
 
 }
 
 
 
-function createOutput(a,i,totalFound){
+function createOutput(table,i,totalFound,dataArray){
 
 
  var tr = document.createElement("tr");
 
-datas.forEach(element=>{
+dataArray.forEach(element=>{
   var td= document.createElement('td');
+  if(element==hNo){ td.addEventListener("click",() =>{ 
+    viewFamilyMembers(element[i])  });td.classList.add('houseNumber')}
 
 if(element==1){ td.textContent = 1+i;  }
  else{ td.textContent = element[i];}
@@ -141,20 +145,20 @@ tr.appendChild(td);
 
 })
 
- // b.innerHTML = (1+i)+' '+pName[i]+" - ( "+ rName[i] +" ) "+"_ "+
-//hNo[i]+" _ "+hName[i]+' _'+ "Mob:"+mNo[i];
 
-a.style.display="block";
 
-a.appendChild(tr);
+table.style.display="block";
+
+table.appendChild(tr);
     
     counter.innerHTML= "Total Found: "+totalFound
 }
 
-    function closeAllLists() {
+    function closeAllLists(className) {
 
-      counter.innerHTML= ""
-     var x = document.getElementsByClassName("autocomplete-items");
+      
+     var x = document.getElementsByClassName(className);
+     console.log(className);
       
       for (var i = 0; i < x.length; i++) {x[i].parentNode.removeChild(x[i])}
     }
@@ -262,3 +266,45 @@ a.appendChild(tr);
       th.className = className;
       th.textContent = textContent;
       return th;}
+
+
+// Close modal on (x) click
+closeBtn.onclick = function() {
+   closeAllLists("home-table");
+  modal.style.display = "none";
+}
+
+// Close modal if user clicks outside
+window.onclick = function(event) {
+  if (event.target == modal) {
+    closeAllLists("home-table");
+    modal.style.display = "none";
+  }
+}
+function viewFamilyMembers(houseNumber){
+
+var modalTable=makeTableForOutPut(modalContent,"home-table");
+
+
+ for (var i = 0; i < hNo.length; i++) {
+                      
+                if (hNo[i] == houseNumber) {
+           
+                          
+
+                        
+                            createOutput (modalTable,i,"X",hDatas); }        //  }
+                }
+
+
+
+
+  modalHeading.textContent=houseNumber;// put input text inside modal
+  
+  modal.style.display = "block";
+
+
+
+
+
+}
