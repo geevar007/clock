@@ -288,7 +288,7 @@ var modalTable=makeTableForOutPut(modalContent,"home-table");
 
  for (var i = 0; i < hNo.length; i++) {
                       
-                if (hNo[i] == houseNumber) {
+                if (hNo[i].toUpperCase() == houseNumber.toUpperCase()) {
            
                           
 
@@ -308,3 +308,4 @@ var modalTable=makeTableForOutPut(modalContent,"home-table");
 
 
 }
+
