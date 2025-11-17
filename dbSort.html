@@ -8,20 +8,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 <style>
-    body { padding: 14px; }
-    table { font-size: 17px !important; }  /* Bigger table font */
+    body { padding: 15px; }
+    table { font-size: 16px !important; }  /* Bigger table font */
     .btn-big { padding: 10px; font-size: 16px; }
     .label-inline { white-space: nowrap; padding-right: 10px; }
-    #bottomButtons {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: white;
-    padding: 10px 15px;
-    box-shadow: 0 -3px 8px rgba(0,0,0,0.2);
-}
-
 </style>
 </head>
 <body>
@@ -65,13 +55,12 @@
 <div id="output" class="mt-3"></div>
 
 <!-- BUTTONS AT BOTTOM -->
-<div id="bottomButtons" class="d-none">
+<div id="bottomButtons" class="mt-3 d-none">
     <div class="d-flex justify-content-between">
         <button id="prevBtn" class="btn btn-outline-primary btn-big" onclick="prevGeneric()">Previous</button>
         <button id="nextBtn" class="btn btn-outline-primary btn-big" onclick="nextGeneric()">Next</button>
     </div>
 </div>
-
 
 <script>
 let excelData = [];
@@ -80,7 +69,7 @@ let houseGroups = {};
 let areaGroups = {};
 
 let houseKeys = [];
-let areaKeys = ["MainR","Thiruthikad"];
+let areaKeys = [];
 
 let houseIndex = 0;
 let areaIndex = 0;
@@ -140,8 +129,7 @@ function groupByArea(){
 }
 
 // Display table
-
-   function showTable(data){
+function showTable(data){
     if (!data || data.length === 0) return;
 
     let html = `
@@ -153,14 +141,9 @@ function groupByArea(){
     headers.forEach(h => html += `<th>${h}</th>`);
     html += "</tr></thead><tbody>";
 
-    data.forEach((row, index) => {
+    data.forEach(row => {
         html += "<tr>";
-        headers.forEach(h => {
-            html += `<td contenteditable="true"
-                        onblur="updateCell(${excelData.indexOf(row)}, '${h}', this.innerText)">
-                        ${row[h]}
-                     </td>`;
-        });
+        headers.forEach(h => html += `<td>${row[h]}</td>`);
         html += "</tr>";
     });
 
@@ -170,9 +153,6 @@ function groupByArea(){
 
     document.getElementById("bottomButtons").classList.remove("d-none");
 }
-
-
- 
 
 /* ---------- HOUSE VIEW ---------- */
 
@@ -249,15 +229,6 @@ function prevGeneric(){
         showAreaGroup();
     }
 }
-function updateCell(rowIndex, column, newValue) {
-    // Update in-memory data
-    excelData[rowIndex][column] = newValue;
-
-    // OPTIONAL: update houseGroups & areaGroups automatically
-    groupByHouse();
-    groupByArea();
-}
-
 </script>
 
 </body>
