@@ -48,7 +48,7 @@ fetch(url)
     
 
      // document.getElementById("controls").classList.remove("d-none");
-      alert("Google Sheet Loaded Successfully!");
+    
   });
 
 /* --------------------------------------
@@ -236,4 +236,5 @@ selectedAngadi= angadiArrays[select.value];
 serialNo=0;
 if (currentMode === "area"){
 goToHouse(selectedAngadi[serialNo]);}
+
 }
