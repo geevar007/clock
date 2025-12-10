@@ -1,264 +1,75 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="utf-8" />
-<title>Excel Viewer</title>
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-
-<style>
-    body { padding: 14px; }
-    table { font-size: 17px !important; }  /* Bigger table font */
-    .btn-big { padding: 10px; font-size: 16px; }
-    .label-inline { white-space: nowrap; padding-right: 10px; }
-    #bottomButtons {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: white;
-    padding: 10px 15px;
-    box-shadow: 0 -3px 8px rgba(0,0,0,0.2);
-}
-
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorter</title>
 </head>
 <body>
+    
 
-<h4>Load Excel File</h4>
-<input type="file" id="excelFile" class="form-control">
+<div id="home">
 
-<!-- VIEW BUTTONS (top section) -->
-<div id="controls" class="mt-3 d-none">
-    <div class="row g-2">
-        <div class="col-6">
-            <button class="btn btn-primary w-100 btn-big" onclick="viewByHouse()">View by House</button>
-        </div>
-        <div class="col-6">
-            <button class="btn btn-secondary w-100 btn-big" onclick="viewByArea()">View by Area</button>
-        </div>
-    </div>
+<button id="prevBtn"  class="cta" onclick="prevGeneric()">Prev</button>
+ <button id="nextBtn" class="cta" onclick="nextGeneric()">Next</button>
+<div style="width: 50%; display: flex;align-items:center; justify-content:space-between;">
+<div class="checkbox-wrapper-8">
+  <input type="checkbox" id="cb3-8" class="tgl tgl-skewed"onclick="toggleFunctions()">
+  <label for="cb3-8" data-tg-on="Area" data-tg-off="House" class="tgl-btn"></label>
+
 </div>
+        <select id="areaSelect" class="form-select" onchange="angadiChange()"></select>
 
-<!-- HOUSE CONTROLS -->
-<div id="houseControls" class="d-none mt-3">
-
-    <!-- Label + Input same line -->
-    <div class="d-flex align-items-center mb-2">
-        <label class="label-inline">Search HNo:</label>
-        <input type="text" id="houseSearch" class="form-control" placeholder="Enter HNo...">
-        <button class="btn btn-success ms-2" onclick="goToHouse()">Go</button>
     </div>
-</div>
 
-<!-- AREA CONTROLS -->
-<div id="areaControls" class="d-none mt-3">
 
-    <div class="d-flex align-items-center mb-2">
-        <label class="label-inline">Area Code:</label>
-        <select id="areaSelect" class="form-select" onchange="showAreaGroup()"></select>
-    </div>
-</div>
 
-<!-- OUTPUT TABLE (buttons will be placed below this) -->
-<div id="output" class="mt-3"></div>
-
-<!-- BUTTONS AT BOTTOM -->
-<div id="bottomButtons" class="d-none">
-    <div class="d-flex justify-content-between">
-        <button id="prevBtn" class="btn btn-outline-primary btn-big" onclick="prevGeneric()">Previous</button>
-        <button id="nextBtn" class="btn btn-outline-primary btn-big" onclick="nextGeneric()">Next</button>
-    </div>
 </div>
 
 
-<script>
-let excelData = [];
-
-let houseGroups = {};
-let areaGroups = {};
-
-let houseKeys = [];
-let areaKeys = ["MainR","Thiruthikad"];
-
-let houseIndex = 0;
-let areaIndex = 0;
-
-let currentMode = "";  // "house" or "area"
-
-// Load Excel file
-document.getElementById("excelFile").addEventListener("change", function(e){
-    let file = e.target.files[0];
-    let reader = new FileReader();
-
-    reader.onload = function(e){
-        let data = new Uint8Array(e.target.result);
-        let workbook = XLSX.read(data, {type: 'array'});
-        let sheet = workbook.Sheets[workbook.SheetNames[0]];
-        excelData = XLSX.utils.sheet_to_json(sheet);
-
-        groupByHouse();
-        groupByArea();
-
-        document.getElementById("controls").classList.remove("d-none");
-        alert("Excel Loaded Successfully!");
-    };
-
-    reader.readAsArrayBuffer(file);
-});
-
-// Group by HNo
-function groupByHouse(){
-    houseGroups = {};
-    excelData.forEach(row => {
-        let key = String(row.HNo).toLowerCase();
-        if (!houseGroups[key]) houseGroups[key] = [];
-        houseGroups[key].push(row);
-    });
-    houseKeys = Object.keys(houseGroups);
-}
-
-// Group by Area
-function groupByArea(){
-    areaGroups = {};
-    excelData.forEach(row => {
-        let key = String(row.AreaCode).toLowerCase();
-        if (!areaGroups[key]) areaGroups[key] = [];
-        areaGroups[key].push(row);
-    });
-    areaKeys = Object.keys(areaGroups);
-
-    let dropdown = document.getElementById("areaSelect");
-    dropdown.innerHTML = "";
-    areaKeys.forEach(code => {
-        let op = document.createElement("option");
-        op.value = code;
-        op.textContent = code.toUpperCase();
-        dropdown.appendChild(op);
-    });
-}
-
-// Display table
-
-   function showTable(data){
-    if (!data || data.length === 0) return;
-
-    let html = `
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped">
-            <thead><tr>`;
-
-    let headers = Object.keys(data[0]);
-    headers.forEach(h => html += `<th>${h}</th>`);
-    html += "</tr></thead><tbody>";
-
-    data.forEach((row, index) => {
-        html += "<tr>";
-        headers.forEach(h => {
-            html += `<td contenteditable="true"
-                        onblur="updateCell(${excelData.indexOf(row)}, '${h}', this.innerText)">
-                        ${row[h]}
-                     </td>`;
-        });
-        html += "</tr>";
-    });
-
-    html += "</tbody></table></div>";
-
-    document.getElementById("output").innerHTML = html;
-
-    document.getElementById("bottomButtons").classList.remove("d-none");
-}
-
-
+ <div id="newInputDiv" >
+    
+    <div class="leftEnd">
  
+    <svg width="19" height="19" class="" 
+    viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    
+    <path d="M10.5 18C14.6421 18 18 14.6421 18 10.5C18 6.35786 14.6421 3 10.5 3C6.35786 3 3 6.35786 3 10.5C3 14.6421 6.35786 18 10.5 18Z" stroke="#717478" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path><path d="M16 16L21 21" stroke="#717478" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+  </path></svg></div>
+  <input type="text" class="newInput"placeholder="Enter HNo"id="houseSearch"autocomplete="off">
+ <div class=" newInput rightEnd"> <button onclick="goToHouse()" > Go</button></div>
 
-/* ---------- HOUSE VIEW ---------- */
+ </div>
 
-function viewByHouse(){
-    currentMode = "house";
-    houseIndex = 0;
 
-    document.getElementById("houseControls").classList.remove("d-none");
-    document.getElementById("areaControls").classList.add("d-none");
+<div id="output"></div>
 
-    showHouseGroup();
-}
+<div style="
+    border: 1px solid #444;
+    padding: 15px;
+    width: 320px;
+    border-radius: 8px;
+    font-family: Arial;
+    margin: auto;">
 
-function showHouseGroup(){
-    let key = houseKeys[houseIndex];
-    showTable(houseGroups[key]);
-}
+<div id="heading" 
+        style="font-size:14px; font-weight:bold; margin-bottom:10px; text-align:center;">
+    </div>
 
-function goToHouse(){
-    let val = document.getElementById("houseSearch").value.toLowerCase().trim();
-
-    if (!val) return;
-
-    let pos = houseKeys.indexOf(val);
-    if (pos === -1){
-        alert("HNo not found");
-        return;
-    }
-
-    houseIndex = pos;
-    showHouseGroup();
-}
-
-/* ---------- AREA VIEW ---------- */
-
-function viewByArea(){
-    currentMode = "area";
-    areaIndex = 0;
-
-    document.getElementById("areaControls").classList.remove("d-none");
-    document.getElementById("houseControls").classList.add("d-none");
-
-    showAreaGroup();
-}
-
-function showAreaGroup(){
-    let selected = document.getElementById("areaSelect").value;
-    areaIndex = areaKeys.indexOf(selected);
-    showTable(areaGroups[selected]);
-}
-
-/* ---------- SHARED NEXT / PREVIOUS ---------- */
-
-function nextGeneric(){
-    if (currentMode === "house") {
-        if (houseIndex < houseKeys.length - 1) houseIndex++;
-        showHouseGroup();
-    } 
-    else if (currentMode === "area") {
-        if (areaIndex < areaKeys.length - 1) areaIndex++;
-        document.getElementById("areaSelect").value = areaKeys[areaIndex];
-        showAreaGroup();
-    }
-}
-
-function prevGeneric(){
-    if (currentMode === "house") {
-        if (houseIndex > 0) houseIndex--;
-        showHouseGroup();
-    } 
-    else if (currentMode === "area") {
-        if (areaIndex > 0) areaIndex--;
-        document.getElementById("areaSelect").value = areaKeys[areaIndex];
-        showAreaGroup();
-    }
-}
-function updateCell(rowIndex, column, newValue) {
-    // Update in-memory data
-    excelData[rowIndex][column] = newValue;
-
-    // OPTIONAL: update houseGroups & areaGroups automatically
-    groupByHouse();
-    groupByArea();
-}
-
-</script>
+    <!-- Table -->
+    <table id="memberTable" 
+           style="width:100%; border-collapse:collapse; text-align:center;">
+        <tbody></tbody>
+    </table>
+</div>
 
 </body>
+
+
+
+
+<script  src="listOut.js"></script>
+<link rel="stylesheet" href="listOut.css">
+
+
 </html>
