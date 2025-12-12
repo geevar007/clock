@@ -1,240 +1,143 @@
-const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTBDN4C80DC8ZWHKNKh8rU_xxx3mMO8koDbWNK89M5zXNH29iVyGtpqLDanpxjIO0DpwuHCKjYC1pbQ/pub?output=csv&gid=1619740580"; // ← paste your CSV link
+/* ---------- URLs ---------- */
+const sheetUrl  = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTBDN4C80DC8ZWHKNKh8rU_xxx3mMO8koDbWNK89M5zXNH29iVyGtpqLDanpxjIO0DpwuHCKjYC1pbQ/pub?output=csv&gid=1619740580";
+const sheetUrl1 = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTBDN4C80DC8ZWHKNKh8rU_xxx3mMO8koDbWNK89M5zXNH29iVyGtpqLDanpxjIO0DpwuHCKjYC1pbQ/pub?output=csv";
 
-const url='https://docs.google.com/spreadsheets/d/1GrULC7lKvBCunsC-3oXguoxl0ClGEhW_jlo3BFXiG_w/gviz/tq?tqx=out:json';
-
-
-
+/* ---------- Globals ---------- */
 let excelData = [];
 let houseGroups = {};
-let areaGroups = {};
-
 let houseKeys = [];
-let areaKeys = [];
-
 let houseIndex = 0;
-let areaIndex = 0;
 
-let currentMode = "";
-let selectedAngadi=[];
+let angadiArrays = {};
+let selectedAngadi = [];
+let serialNo = 0;
+
+let currentMode = "house";
+
 const select = document.getElementById("areaSelect");
- let angadiArrays = {};
-let serialNo=0;
-let inputHno=document.getElementById("houseSearch");
+const inputHno = document.getElementById("houseSearch");
 
+/* ---------- LOAD MAIN SHEET (Houses) ---------- */
+async function loadSheet1() {
+  const csv = await (await fetch(sheetUrl1)).text();
+  const rows = csv.trim().split("\n").map(r => r.split(","));
+  const headers = rows[0];
 
-/* Load Sheet Automatically */
-fetch(url)
-  .then(gRes => gRes.text())// convert the responce to plain text
-  .then(gText => { 
-      const gJson = JSON.parse(gText.substr(47).slice(0, -2)); 
-      
-   
-     
-      const gCols = gJson.table.cols.map(c => c.label);
-
-
-
-      excelData = gJson.table.rows.map(row => {
-          const obj = {};
-          row.c.forEach((cell, i) => {
-            if(i!=2){obj[gCols[i]] = cell ? cell.v : "nd"}
-              
-          });
- 
-          return obj;
-      });
-
-      groupByHouse();
-    
-
-     // document.getElementById("controls").classList.remove("d-none");
-    
+  excelData = rows.slice(1).map(row => {
+    let obj = {};
+    headers.forEach((h, i) => obj[h] = row[i] || "");
+    return obj;
   });
 
-/* --------------------------------------
-   Group Data by House Number
--------------------------------------- */
+  groupByHouse();
+}
+
+/* ---------- Group by House Number ---------- */
 function groupByHouse() {
-    houseGroups = {};
-    excelData.forEach(row => {
-        const key = String(row.HNo).toLowerCase();
-        (houseGroups[key] ??= []).push(row);
-    });
-    houseKeys = Object.keys(houseGroups);
-    
+  houseGroups = {};
+  excelData.forEach(r => {
+    const key = String(r.HNo).toLowerCase();
+    (houseGroups[key] ??= []).push(r);
+  });
+  houseKeys = Object.keys(houseGroups);
 }
 
-
-
-/* --------------------------------------
-   Display Table
--------------------------------------- */
+/* ---------- Display Table ---------- */
 function showTable(data) {
-    if (!data?.length) return;
+  if (!data || !data.length) return;
 
-   
+  const first = data[0];
+  document.getElementById("heading").textContent =
+    `${first.HNo} - ${first.House}  ${first.Mob || ""}`;
 
-// Common fields
-const common = {
-  HNo: data[0].HNo,
-  House: data[0].House,
-  Mob: data[0].Mob ?? ""
-};
-
-// Single-line common heading
-document.getElementById("heading").textContent =
-  `${common.HNo} - ${common.House}  ${common.Mob}`;
-
-// Fill table (no labels, only values)
-const tbody = document.querySelector("#memberTable tbody");
-tbody.innerHTML = "";
-data.forEach(person => {
-  const tr = document.createElement("tr");
-  
-  tr.innerHTML = `
-      <td style="border:1px solid #ddd; padding:6px;">${person.NO}</td>
-      <td style="border:1px solid #ddd; padding:6px;">${person.Name}</td>
-  `;
-  
-  tbody.appendChild(tr);
-})
-
-
-
-  
+  const tbody = document.querySelector("#memberTable tbody");
+  tbody.innerHTML = data.map(p =>
+    `<tr>
+       <td style="border:1px solid #ddd;padding:6px">${p.NO}</td>
+       <td style="border:1px solid #ddd;padding:6px">${p.Name}</td>
+     </tr>`
+  ).join("");
 }
 
-/* --------------------------------------
-   House Mode
--------------------------------------- */
+/* ---------- Modes ---------- */
 function viewByHouse() {
-    
-    currentMode = "house";
-    houseIndex = 0;
-   // document.getElementById("houseControls").classList.remove("d-none");
-    //document.getElementById("areaControls").classList.add("d-none");
-    showHouseGroup();
+  currentMode = "house";
+  houseIndex = 0;
+  showHouseGroup();
 }
 
 function showHouseGroup() {
-    const key = houseKeys[houseIndex];
-    showTable(houseGroups[key]);
+  showTable(houseGroups[houseKeys[houseIndex]]);
 }
 
-function goToHouse(houseNumber) {
+function goToHouse(hn) {
+  const val = (hn || inputHno.value).trim().toLowerCase();
+  const pos = houseKeys.indexOf(val);
 
-  
-    let val;
-    if(houseNumber) {val=houseNumber} else{  val = inputHno.value; }
+  if (pos === -1) return alert(hn + " Not found");
 
-    
-    const pos = houseKeys.indexOf(val.trim().toLowerCase());
-    
-    if (pos === -1) return alert(houseNumber+"Not found");
-    houseIndex = pos;
-    showHouseGroup();
+  houseIndex = pos;
+  showHouseGroup();
 }
 
-/* --------------------------------------
-   Area Mode
--------------------------------------- */
 function viewByArea() {
-   
-    currentMode = "area";
-  goToHouse(selectedAngadi[serialNo]);
-    
-  
+  currentMode = "area";
+  serialNo = 0;
+  goToHouse(selectedAngadi[0]);
 }
 
-
-
-/* --------------------------------------
-   Navigation
--------------------------------------- */
+/* ---------- Navigation ---------- */
 function nextGeneric() {
-    if (currentMode === "house") {
-        if (houseIndex < houseKeys.length - 1) houseIndex++;
-        showHouseGroup();
-    } else if (currentMode === "area") {
-        
-        if (serialNo < selectedAngadi.length-1) serialNo++;
-      
-        goToHouse(selectedAngadi[serialNo]);;
-        
-    }
+  if (currentMode === "house") {
+    if (houseIndex < houseKeys.length - 1) houseIndex++;
+    showHouseGroup();
+  } else {
+    if (serialNo < selectedAngadi.length - 1) serialNo++;
+    goToHouse(selectedAngadi[serialNo]);
+  }
 }
 
 function prevGeneric() {
-    if (currentMode === "house") {
-        if (houseIndex > 0) houseIndex--;
-        showHouseGroup();
-        
-    } else if (currentMode === "area") {
-       
-        if (serialNo > 0) serialNo--;
-      
-        goToHouse(selectedAngadi[serialNo]);
-    }
+  if (currentMode === "house") {
+    if (houseIndex > 0) houseIndex--;
+    showHouseGroup();
+  } else {
+    if (serialNo > 0) serialNo--;
+    goToHouse(selectedAngadi[serialNo]);
+  }
 }
 
 function toggleFunctions() {
-    let isOn = document.getElementById("cb3-8").checked;
-
-    if (isOn) {
-        viewByArea()
-    } else {
-
-viewByHouse()
-       
-    }
+  document.getElementById("cb3-8").checked ? viewByArea() : viewByHouse();
 }
-viewByHouse()
 
-window.onload = loadSheet;
-
+/* ---------- LOAD ANGADI SHEET ---------- */
 async function loadSheet() {
+  const csv = await (await fetch(sheetUrl)).text();
+  const rows = csv.trim().split("\n").map(r => r.split(","));
+  const headers = rows[0];
 
-    const response = await fetch(sheetUrl);
-    const csvText = await response.text();
+  angadiArrays = {};
+  headers.forEach(h => angadiArrays[h] = []);
 
-    // Convert CSV text into rows & columns
-    const rows = csvText.trim().split("\n").map(r => r.split(","));
+  rows.slice(1).forEach(r =>
+    r.forEach((v, i) => angadiArrays[headers[i]].push(v))
+  );
 
-    const headers = rows[0];
+  select.innerHTML = headers.map((h, i) =>
+    `<option value="${h}" ${i === 0 ? "selected" : ""}>${h}</option>`
+  ).join("");
 
-    // Create empty arrays for each header
-   
-    headers.forEach(h => angadiArrays[h] = []);
-
-    // Fill each column
-    for (let i = 1; i < rows.length; i++) {
-        rows[i].forEach((value, colIndex) => {
-            const header = headers[colIndex];
-            angadiArrays[header].push(value);
-        });
-    }
-
-    // Populate dropdown with column headers
-    
-    select.innerHTML = "";
-
-    headers.forEach((header, index) => {
-        const option = document.createElement("option");
-        option.value = header;
-        option.textContent = header;
-        if (index === 0) option.selected = true; // default first column
-        select.appendChild(option);
-    });
-selectedAngadi= angadiArrays[select.value];
-    // Display default column on load
-    //displayColumn();
-    // document.getElementById("fileName").textContent ="lodedd sucessfully" ;
+  selectedAngadi = angadiArrays[select.value];
 }
-function angadiChange(){
 
-selectedAngadi= angadiArrays[select.value];
-serialNo=0;
-if (currentMode === "area"){
-goToHouse(selectedAngadi[serialNo]);}
-
+function angadiChange() {
+  selectedAngadi = angadiArrays[select.value];
+  serialNo = 0;
+  if (currentMode === "area") goToHouse(selectedAngadi[0]);
 }
+
+/* ---------- Initialize ---------- */
+window.onload = loadSheet;
+loadSheet1();
+viewByHouse();
