@@ -126,7 +126,7 @@ const rows = csv.trim().split("\n").map(r =>r.replace(/\r/g, "").split(","));
   headers.forEach(heading => angadiArrays[heading] = []);
 
   rows.slice(1).forEach(row =>
-    row.forEach((element, slNo) => angadiArrays[headers[slNo]].push(element))
+    row.forEach((element, slNo) => {if(element!=''){angadiArrays[headers[slNo]].push(element)}})
   );
 
 
@@ -149,3 +149,4 @@ function angadiChange() {
 window.onload = loadSheet;
 loadSheet1();
 viewByHouse();
+
