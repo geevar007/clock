@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sort</title>
+    <title>Sorter</title>
 </head>
 <body>
     
@@ -11,7 +11,7 @@
 <div id="home">
 
 
-<div style="width: 50%; display: flex;align-items:center; justify-content:space-between;">
+<div style="width: 100%; display: flex;justify-content: space-around;">
 <div class="checkbox-wrapper-8">
   <input type="checkbox" id="cb3-8" class="tgl tgl-skewed"onclick="toggleFunctions()">
   <label for="cb3-8" data-tg-on="Area" data-tg-off="House" class="tgl-btn"></label>
@@ -26,19 +26,7 @@
 </div>
 
 
- <div id="newInputDiv" >
-    
-    <div class="leftEnd">
  
-    <svg width="19" height="19" class="" 
-    viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    
-    <path d="M10.5 18C14.6421 18 18 14.6421 18 10.5C18 6.35786 14.6421 3 10.5 3C6.35786 3 3 6.35786 3 10.5C3 14.6421 6.35786 18 10.5 18Z" stroke="#717478" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path><path d="M16 16L21 21" stroke="#717478" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-  </path></svg></div>
-  <input type="text" class="newInput"placeholder="Enter HNo"id="houseSearch"autocomplete="off">
- <div class=" newInput rightEnd"> <button onclick="goToHouse()" > Go</button></div>
-
- </div>
 
 
 <div id="output"></div>
@@ -61,16 +49,34 @@
         <tbody></tbody>
     </table>
 </div>
+
+
 <div id="footDiv">
 
 
 <button id="prevBtn"  class="cta" onclick="prevGeneric()">Prev</button>
+
+<div id="newInputDiv" >
+    
+    <div class="leftEnd">
+ 
+    <svg width="19" height="19" class="" 
+    viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    
+    <path d="M10.5 18C14.6421 18 18 14.6421 18 10.5C18 6.35786 14.6421 3 10.5 3C6.35786 3 3 6.35786 3 10.5C3 14.6421 6.35786 18 10.5 18Z" stroke="#717478" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path><path d="M16 16L21 21" stroke="#717478" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+  </path></svg></div>
+  <input type="text" class="newInput"placeholder="Enter HNo"id="houseSearch"autocomplete="off">
+ <button onclick="goToHouse()" > Go</button>
+
+ </div>
+
+
+
 <button id="nextBtn" class="cta" onclick="nextGeneric()">Next</button>
 
 </div>
 
 
-    
 </body>
 
 
@@ -81,6 +87,3 @@
 
 
 </html>
-
-
-
