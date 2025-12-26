@@ -2,8 +2,8 @@ body{
 
  margin: 0;
   min-height: 100vh;
-  background-color: #f4f4f4;
-  font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      font-family: Arial, sans-serif;
 
 
 }
@@ -38,6 +38,11 @@ cubic-bezier(0.3, 0, 0.5, 1);
 }
 
 
+
+
+
+
+
 #home {display: flex;
         flex-direction: row;
     justify-content: space-around;
@@ -50,12 +55,7 @@ cubic-bezier(0.3, 0, 0.5, 1);
 
 #newInputDiv {
     display: flex;
-    justify-content: center;
-    width: 100%;
-    height: 25px;
-    background-color: white;
-    padding: 6px;
-    z-index: 1;
+    align-items: center;
 }
 
 .leftEnd {
@@ -70,7 +70,7 @@ cubic-bezier(0.3, 0, 0.5, 1);
 .newInput {
     background-color: #e0effa;
     border: none;
-    width: 40%;
+    width:66px;
     height: 40px;
 }
 .rightEnd {
@@ -224,5 +224,7 @@ position: fixed;
 bottom: 10px;
 justify-content: space-between;
 width: 100%;
- }
 
+
+
+}
