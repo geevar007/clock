@@ -1,6 +1,6 @@
 /* ---------- URLs ---------- */
-const sheetUrl  = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTBDN4C80DC8ZWHKNKh8rU_xxx3mMO8koDbWNK89M5zXNH29iVyGtpqLDanpxjIO0DpwuHCKjYC1pbQ/pub?output=csv&gid=1619740580";
-const sheetUrl1 = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTBDN4C80DC8ZWHKNKh8rU_xxx3mMO8koDbWNK89M5zXNH29iVyGtpqLDanpxjIO0DpwuHCKjYC1pbQ/pub?output=csv";
+const angadiNames  = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTBDN4C80DC8ZWHKNKh8rU_xxx3mMO8koDbWNK89M5zXNH29iVyGtpqLDanpxjIO0DpwuHCKjYC1pbQ/pub?output=csv&gid=1619740580";
+const voterNames = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTBDN4C80DC8ZWHKNKh8rU_xxx3mMO8koDbWNK89M5zXNH29iVyGtpqLDanpxjIO0DpwuHCKjYC1pbQ/pub?output=csv";
 
 /* ---------- Globals ---------- */
 let excelData = [];
@@ -19,13 +19,13 @@ const inputHno = document.getElementById("houseSearch");
 
 /* ---------- LOAD MAIN SHEET (Houses) ---------- */
 async function loadSheet1() {
-  const csv = await (await fetch(sheetUrl1)).text();
+  const csv = await (await fetch(voterNames)).text();
   const rows = csv.trim().split("\n").map(r => r.split(","));
   const headers = rows[0];
 
   excelData = rows.slice(1).map(row => {
     let obj = {};
-    headers.forEach((h, i) => obj[h] = row[i] || "");
+    headers.forEach((head, i) => obj[head] = row[i] || "");
     return obj;
   });
 
@@ -113,16 +113,22 @@ function toggleFunctions() {
 
 /* ---------- LOAD ANGADI SHEET ---------- */
 async function loadSheet() {
-  const csv = await (await fetch(sheetUrl)).text();
-  const rows = csv.trim().split("\n").map(r => r.split(","));
+  const csv = await (await fetch(angadiNames)).text();
+ 
+
+const rows = csv.trim().split("\n").map(r =>r.replace(/\r/g, "").split(","));
+
+
+
   const headers = rows[0];
-
+  console.table(rows[0]);
   angadiArrays = {};
-  headers.forEach(h => angadiArrays[h] = []);
+  headers.forEach(heading => angadiArrays[heading] = []);
 
-  rows.slice(1).forEach(r =>
-    r.forEach((v, i) => angadiArrays[headers[i]].push(v))
+  rows.slice(1).forEach(row =>
+    row.forEach((element, slNo) => angadiArrays[headers[slNo]].push(element))
   );
+
 
   select.innerHTML = headers.map((h, i) =>
     `<option value="${h}" ${i === 0 ? "selected" : ""}>${h}</option>`
@@ -133,6 +139,8 @@ async function loadSheet() {
 
 function angadiChange() {
   selectedAngadi = angadiArrays[select.value];
+
+ 
   serialNo = 0;
   if (currentMode === "area") goToHouse(selectedAngadi[0]);
 }
