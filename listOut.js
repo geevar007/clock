@@ -20,8 +20,9 @@ const inputHno = document.getElementById("houseSearch");
 /* ---------- LOAD MAIN SHEET (Houses) ---------- */
 async function loadSheet1() {
   const csv = await (await fetch(voterNames)).text();
-  const rows = csv.trim().split("\n").map(r => r.split(","));
-  const headers = rows[0];
+//  const rows = csv.trim().split("\n").map(r => r.split(","));
+  const rows = csv.trim().split("\n").map(r =>r.replace(/\r/g, "").split(","));
+const headers = rows[0];
 
   excelData = rows.slice(1).map(row => {
     let obj = {};
@@ -48,7 +49,7 @@ function showTable(data) {
 
   const first = data[0];
   document.getElementById("heading").textContent =
-    `${first.HNo} - ${first.House}  ${first.Mob || ""}`;
+    ` ${getAngadi(first.HNo) || ""} ${first.HNo} - ${first.House}  `;
 
   const tbody = document.querySelector("#memberTable tbody");
   tbody.innerHTML = data.map(p =>
@@ -91,7 +92,7 @@ function nextGeneric() {
   if (currentMode === "house") {
     if (houseIndex < houseKeys.length - 1) houseIndex++;
     showHouseGroup();
-  } else {
+  } else { 
     if (serialNo < selectedAngadi.length - 1) serialNo++;
     goToHouse(selectedAngadi[serialNo]);
   }
@@ -114,22 +115,15 @@ function toggleFunctions() {
 /* ---------- LOAD ANGADI SHEET ---------- */
 async function loadSheet() {
   const csv = await (await fetch(angadiNames)).text();
+ const rows = csv.trim().split("\n").map(r =>r.replace(/\r/g, "").split(","));
+const headers = rows[0];
  
-
-const rows = csv.trim().split("\n").map(r =>r.replace(/\r/g, "").split(","));
-
-
-
-  const headers = rows[0];
-  console.table(rows[0]);
-  angadiArrays = {};
-  headers.forEach(heading => angadiArrays[heading] = []);
-
-  rows.slice(1).forEach(row =>
+headers.forEach(heading => angadiArrays[heading] = []);
+rows.slice(1).forEach(row =>
     row.forEach((element, slNo) => {if(element!=''){angadiArrays[headers[slNo]].push(element)}})
   );
 
-
+console.log(angadiArrays);
   select.innerHTML = headers.map((h, i) =>
     `<option value="${h}" ${i === 0 ? "selected" : ""}>${h}</option>`
   ).join("");
@@ -145,8 +139,31 @@ function angadiChange() {
   if (currentMode === "area") goToHouse(selectedAngadi[0]);
 }
 
+
+
+
+function getAngadi(houseNo) {
+  const searchValue = houseNo.toLowerCase();
+
+  for (const arrayName in angadiArrays) {
+    const found = angadiArrays[arrayName].some(
+      item => item.toLowerCase() === searchValue
+    );
+
+    if (found) {
+      return arrayName;
+    }
+  }
+  return "അറിയില്ല";
+}
+
+
+
+
+
+
+
 /* ---------- Initialize ---------- */
 window.onload = loadSheet;
 loadSheet1();
 viewByHouse();
-
