@@ -1,311 +1,274 @@
-const fileInput = document.getElementById("excel-file");
-  
-var resultArr=[];
-    const pName=[];
-    const hName=[];
-    const hNo=[];
-    const mNo=[];
-    const rName=[];
-    const  datas=[1,pName,rName,hNo,hName,mNo];
-    const hDatas=[1,pName,hName];
-    var tHeader=[ "No","Name","Relative","HNo","House","Mob:" ]
+/* ---------------------------------------
+   Global DOM Elements
+---------------------------------------- */
 
-    var modal = document.getElementById("myModal");
-    var modalContent= document.getElementById("modal-content");
-    var modalHeading=document.getElementById("houseNumber")
-    var openBtn = document.getElementById("openBtn");
-    var closeBtn = document.getElementsByClassName("close")[0];
-    var userInput = document.getElementById("userInput");
-    var displayText = document.getElementById("displayText");
+const newInputDiv = document.getElementById("newInputDiv");
+const homeDiv = document.getElementById("home");
 
-    const newInputDiv=document.getElementById("newInputDiv");
-    const homeDiv=document.getElementById("home");
-    const welcomeDiv=document.getElementById("welcome");
-    const inputBox=document.getElementById("name");
-    const inputHome=document.getElementById("house");
-    const counter=document.getElementById("counter");
- 
-  const textToChange = document.getElementById('nameautocomplete-list');
-  var myButton = document.getElementById("myButton");
-  const fileLabel = document.getElementById('file-label');
-  const mainDiv=document.getElementById('container');
-  inputBox.disabled = true;
-  inputHome.disabled=true;
-  inputBox.addEventListener("input", function(e) { keyPressed("s");})
-  inputHome.addEventListener("input", function(e) {subSearch();  }) 
-    
-    function keyPressed(keyName){ 
-      inputHome.value=null;
-      closeAllLists("result-table");
-      counter.innerHTML= ""
-      var arr= getSelectedArray();
-      if(keyName=="s"){
-      var val = inputBox.value;
-       if(!val) {return false }
-        if (val.length>1){console.log("no need off search all")
+const inputBox = document.getElementById("name");
+const inputHome = document.getElementById("house");
+const counter = document.getElementById("counter");
+const mainDiv = document.getElementById("container");
+const modal = document.getElementById("myModal");
+const modalContent = document.getElementById("modal-content");
+const modalHeading = document.getElementById("houseNumber");
+const closeBtn = document.getElementsByClassName("close")[0];
+
+const angadiNames  = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTBDN4C80DC8ZWHKNKh8rU_xxx3mMO8koDbWNK89M5zXNH29iVyGtpqLDanpxjIO0DpwuHCKjYC1pbQ/pub?output=csv&gid=1619740580"; 
+const voterNames = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTBDN4C80DC8ZWHKNKh8rU_xxx3mMO8koDbWNK89M5zXNH29iVyGtpqLDanpxjIO0DpwuHCKjYC1pbQ/pub?output=csv";
 
 
 
+/* ---------------------------------------
+   Data Arrays
+---------------------------------------- */
+let resultArr = [];
+const slNO=[];
+const pName = [];
+const rName = [];
+const hNo = [];
+const hName = [];
+const mNo = [];
+let angadiArrays = {};
 
+const datas = [1, pName, rName, hNo, hName, mNo];
+const hDatas = [1, pName, hName];
 
+/* ---------------------------------------
+   Initial Setup
+---------------------------------------- */
+inputBox.disabled = true;
+inputHome.disabled = true;
 
-        }
-       // const file = fileInput.files[0]; 
-        
-        
-       
-        
-        var outPutTable = makeTableForOutPut(mainDiv,"result-table")
-       
-       var totalFound=0;
-       resultArr=[];
-        /*for each item in the array...*/
-        for (var i = 0; i < arr.length; i++) {
-                      
-                if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-           
-                           resultArr.push(i);
+inputBox.addEventListener("input", () => keyPressed("s"));
+inputHome.addEventListener("input", () => subSearch());
 
-                        
-                           totalFound++; createOutput (outPutTable,i,totalFound,datas); }        //  }
-                }
-                          }
-                        
-      else{
+/* ---------------------------------------
+   Main Search (By First Input)
+---------------------------------------- */
+function keyPressed(key) {
+    inputHome.value = "";
+    closeAllLists("result-table");
+    counter.textContent = "";
 
-        inputBox.value=null;
+    const arr = getSelectedArray();
 
-        inputHome.value=null;
+    if (key === "s") {
+        const val = inputBox.value;
+        if (!val) return;
 
+        const tableBody = makeTableForOutPut(mainDiv, "result-table");
+        let totalFound = 0;
+        resultArr = [];
 
-      }                  
-                        
-                        
-                        
-                        }//Keypressd End*/}})
-   
-   
-      
+        arr.forEach((item, i) => {
+            if (item.substr(0, val.length).toUpperCase() === val.toUpperCase()) {
+                resultArr.push(i);
+                totalFound++;
+                createOutput(tableBody, i, totalFound, datas);
+            }
+        });
 
-function subSearch(){
-  if(!inputBox.value) { return false }
-  closeAllLists("result-table"); 
-  counter.innerHTML= ""
-
-     var totalFound = 0;
-     var val2=inputHome.value;
-     var a =  makeTableForOutPut(mainDiv,"result-table");
-    
-
-     resultArr.forEach(function (element) {
-     
-     var arr2=hName;
-     var sOption=document.querySelector('input[name="option"]:checked').value
-    if( sOption=='hName'){ var arr2=pName;}
-
- 
-        if(val2 && arr2[element].substr(0,val2.length).toUpperCase()==val2.toUpperCase()){
-          totalFound++;
-          createOutput (a,element,totalFound,datas); }// if same text find end
-
-if(!val2){keyPressed("s")}
-     })// forEach result arr End 
-                    }// sub search end heare
-
-function makeTableForOutPut(place,className){
-
-  var table = document.createElement("table");
-   var tbody=document.createElement('tbody');
-  
-  table.setAttribute("class", className);
-  place.appendChild(table);
-  table.appendChild(tbody);
-  return tbody;
-
-}
-
-
-
-function createOutput(table,i,totalFound,dataArray){
-
-
- var tr = document.createElement("tr");
-
-dataArray.forEach(element=>{
-  var td= document.createElement('td');
-  if(element==hNo){ td.addEventListener("click",() =>{ 
-    viewFamilyMembers(element[i])  });td.classList.add('houseNumber')}
-
-if(element==1){ td.textContent = 1+i;  }
- else{ td.textContent = element[i];}
-
-tr.appendChild(td);
-
-
-
-})
-
-
-
-table.style.display="block";
-
-table.appendChild(tr);
-    
-    counter.innerHTML= "Total Found: "+totalFound
-}
-
-    function closeAllLists(className) {
-
-      
-     var x = document.getElementsByClassName(className);
-     console.log(className);
-      
-      for (var i = 0; i < x.length; i++) {x[i].parentNode.removeChild(x[i])}
+    } else {
+        inputBox.value = "";
+        inputHome.value = "";
     }
+}
+
+/* ---------------------------------------
+   Sub Search (Second Filter)
+---------------------------------------- */
+function subSearch() {
+    if (!inputBox.value) return;
+
+    closeAllLists("result-table");
+    counter.textContent = "";
+
+    const value = inputHome.value;
+    const tableBody = makeTableForOutPut(mainDiv, "result-table");
+    let totalFound = 0;
+
+    resultArr.forEach(i => {
+        const selectedOption = document.querySelector('input[name="option"]:checked').value;
+        const arr = (selectedOption === 'hName') ? pName : hName;
+
+        if (value && arr[i].substr(0, value.length).toUpperCase() === value.toUpperCase()) {
+            totalFound++;
+            createOutput(tableBody, i, totalFound, datas);
+        }
+
+        if (!value) keyPressed("s");
+    });
+}
+
+/* ---------------------------------------
+   Build Table for Results
+---------------------------------------- */
+function makeTableForOutPut(place, className) {
+    const table = document.createElement("table");
+    const tbody = document.createElement("tbody");
+
+    table.className = className;
+    place.appendChild(table);
+    table.appendChild(tbody);
+
+    return tbody;
+}
+
+/* ---------------------------------------
+   Create Table Row Output
+---------------------------------------- */
+function createOutput(table, index, totalFound, dataArray) {
+    const tr = document.createElement("tr");
+
+    dataArray.forEach(arr => {
+        const td = document.createElement("td");
+
+        if (arr === hNo) {
+            td.classList.add("houseNumber");
+            td.addEventListener("click", () => viewFamilyMembers(arr[index]));
+        }
+
+        td.textContent = arr === 1 ? index + 1 : arr[index];
+        tr.appendChild(td);
+    });
+
+    table.style.display = "block";
+    table.appendChild(tr);
+    counter.textContent = "Total Found: " + totalFound;
+}
+
+/* ---------------------------------------
+   Remove Existing Tables
+---------------------------------------- */
+function closeAllLists(className) {
+    document.querySelectorAll("." + className).forEach(el => el.remove());
+}
+
+/* ---------------------------------------
+   Handle File Load
+---------------------------------------- */
+
+async function checkFile() {
+    
  
+    try {
+         
+        // Fetch Url
+        const csv = await (await fetch(voterNames)).text();
+  const rows = csv.trim().split("\n").map(r =>r.replace(/\r/g, "").split(","));
 
-  function checkFile(){
+  rows.slice(1).forEach(row =>
+    row.forEach((data, i) =>{ if(i!=0) {datas[i].push(data)}})
+  );
 
-    hName.length = 0;
-    hNo.length = 0;
-    mNo.length = 0;
-    pName.length = 0;
-    rName.length=0;
-    const file = fileInput.files[0]; 
-  if (file) {
+
+ document.getElementById("fileName").textContent = "Connected";
+  // UI updates (unchanged)
     newInputDiv.style.display = "flex";
     homeDiv.style.display = "flex";
-   welcomeDiv.style.display="none";
+   
     inputBox.disabled = false;
-    inputHome.disabled=false;
-   // fileLabel.textContent = fileInput.files[0].name.replace(/\.[^/.]+$/, '');
-    //fileLabel.style.backgroundColor="rgb(82 95 98)";
-    //fileLabel.style.color="white";
-    document.getElementById("fileName").innerHTML = fileInput.files[0].name.replace(/\.[^/.]+$/, '');
-    welcomeDiv.style.display="none";
-      const reader = new FileReader();
-      reader.onload = function(e) {
-          const data = new Uint8Array(e.target.result);
-          const workbook = XLSX.read(data, { type: "array" });
-          const sheetName = workbook.SheetNames[0];
-          const worksheet = workbook.Sheets[sheetName];
-          const range = XLSX.utils.decode_range(worksheet["!ref"]);
-          const  totalColm= range.e.c ;
-           var  totalRo=range.e.r;
-    const sNo=[];
+    inputHome.disabled = false;
     
-              
-          for (let i=1; i <=5;  i++) {
-         
-              
-             
-            for (let rNo=1; rNo<=totalRo; rNo++ ) {
-              const cell = worksheet[XLSX.utils.encode_cell({ r: rNo, c: i })];
-              var cellValue = cell ? cell.v : "x"; // Use .v to get the raw value
-              
-              if (typeof cellValue === 'number') {cellValue=cellValue.toString()}
-             switch(i){
-
-            case 1:
-              pName.push(cellValue);  
-            break;
-
-            case 2:
-              rName.push(cellValue);   
-           
-            break;
-
-            case 3:
-                hNo.push(cellValue);
-            break;
-
-            case 4:
-              hName.push(cellValue);
-            break;
-
-            case 5:
-              mNo.push(cellValue);
-            break;
-
-                    }//switch end
-               
-                             } //xxxxxxxxxxxx loop for totalrow  End here
-                
-                                 } // End   4 times loop  ---- End
-     
-                                              } // On load function end here
-    reader.readAsArrayBuffer(file);  }// if file end
-                                                      
-
-
-}// check file end
-
- 
-      
-
-   function getSelectedArray(){
-    var selectedRadioButton = document.querySelector('input[name="option"]:checked');
-
-      switch (selectedRadioButton.value) {
-        case 'pName':
-          inputHome.placeholder = "Filter By House";
-          return pName;
-        case 'hName':
-          inputHome.placeholder = "Filter By Name";
-          return hName;
-        case 'hNo':
-          inputHome.placeholder = "Filter By House";
-          return hNo;
-        }
-
-      
-    } 
-
-    function createTableHeaderCell(className, textContent) {
-      const th = document.createElement("th");
-      th.className = className;
-      th.textContent = textContent;
-      return th;}
-
-
-// Close modal on (x) click
-closeBtn.onclick = function() {
-   closeAllLists("home-table");
-  modal.style.display = "none";
+    } catch (err) {
+        console.error(err);
+        alert("Failed to read Google Sheets data.");
+    }
 }
 
-// Close modal if user clicks outside
-window.onclick = function(event) {
-  if (event.target == modal) {
+
+async function loadangadi() {
+  const csv = await (await fetch(angadiNames)).text();
+ const rows = csv.trim().split("\n").map(r =>r.replace(/\r/g, "").split(","));
+const headers = rows[0];
+ 
+headers.forEach(heading => angadiArrays[heading] = []);
+rows.slice(1).forEach(row =>
+    row.forEach((element, slNo) => {if(element!=''){angadiArrays[headers[slNo]].push(element)}})
+  ) 
+}
+
+
+
+
+
+
+
+
+
+/* ---------------------------------------
+   Radio Button Array Selection
+---------------------------------------- */
+function getSelectedArray() {
+    const selected = document.querySelector('input[name="option"]:checked').value;
+
+    if (selected === "pName") {
+        inputHome.placeholder = "Filter By House";
+        return pName;
+    }
+    if (selected === "hName") {
+        inputHome.placeholder = "Filter By Name";
+        return hName;
+    }
+    if (selected === "hNo") {
+        inputHome.placeholder = "Filter By House";
+        return hNo;
+    }
+}
+
+/* ---------------------------------------
+   Modal Behavior
+---------------------------------------- */
+closeBtn.onclick = () => {
     closeAllLists("home-table");
     modal.style.display = "none";
-  }
+};
+
+window.onclick = event => {
+    if (event.target === modal) {
+        closeAllLists("home-table");
+        modal.style.display = "none";
+    }
+};
+
+/* ---------------------------------------
+   View Family Members (Modal)
+---------------------------------------- */
+function viewFamilyMembers(houseNumber) {
+    const tableBody = makeTableForOutPut(modalContent, "home-table");
+
+    hNo.forEach((num, i) => {
+        if (num.toUpperCase() === houseNumber.toUpperCase()) {
+            createOutput(tableBody, i, "X", hDatas);
+        }
+    });
+
+    modalHeading.textContent = getAngadi(houseNumber)
+    modal.style.display = "block";
 }
-function viewFamilyMembers(houseNumber){
-
-var modalTable=makeTableForOutPut(modalContent,"home-table");
-
-
- for (var i = 0; i < hNo.length; i++) {
-                      
-                if (hNo[i].toUpperCase() == houseNumber.toUpperCase()) {
-           
-                          
-
-                        
-                            createOutput (modalTable,i,"X",hDatas); }        //  }
-                }
-
-
-
-
-  modalHeading.textContent=houseNumber;// put input text inside modal
   
-  modal.style.display = "block";
 
+function getAngadi(houseNo) {
+  const searchValue = houseNo.toLowerCase();
 
+  for (const arrayName in angadiArrays) {
+    const found = angadiArrays[arrayName].some(
+      item => item.toLowerCase() === searchValue
+    );
 
-
-
+    if (found) {
+      return arrayName;
+    }
+  }
+  return "അറിയില്ല";
 }
 
+
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+        checkFile();
+        loadangadi();
+    });
