@@ -1,6 +1,6 @@
 body{margin:0px;}
 
-
+  
  /* Modal background */
  .modal {
   display: none;
@@ -61,7 +61,7 @@ input[type=radio]{
 }
 
 #fileName{
-
+cursor: default;
 color: white;
 
 }
@@ -139,7 +139,8 @@ tr:nth-child(even) {
 }
 
 .houseNumber{
-
+  
+ 
 cursor: pointer;
 color: blue;
 
