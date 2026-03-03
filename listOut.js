@@ -159,7 +159,14 @@ function getAngadi(houseNo) {
 
 
 
-
+ document.addEventListener("keydown", function(event) {
+    if (event.key === "ArrowLeft") {
+     prevGeneric();   // Simulate click
+    }
+    if (event.key === "ArrowRight") {
+     nextGeneric();  // Simulate click
+    }
+  });
 
 
 
@@ -167,3 +174,4 @@ function getAngadi(houseNo) {
 window.onload = loadSheet;
 loadSheet1();
 viewByHouse();
+
