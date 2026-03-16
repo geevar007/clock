@@ -65,7 +65,7 @@ function keyPressed(key) {
             if (item.substr(0, val.length).toUpperCase() === val.toUpperCase()) {
                 resultArr.push(i);
                 totalFound++;
-                createOutput(tableBody, i, totalFound, datas);
+                createOutput(tableBody, i, totalFound, datas,"Yes");
             }
         });
 
@@ -118,7 +118,7 @@ function makeTableForOutPut(place, className) {
 /* ---------------------------------------
    Create Table Row Output
 ---------------------------------------- */
-function createOutput(table, index, totalFound, dataArray) {
+function createOutput(table, index, totalFound, dataArray,type) {
     const tr = document.createElement("tr");
 
     dataArray.forEach(arr => {
@@ -126,9 +126,21 @@ function createOutput(table, index, totalFound, dataArray) {
 
         if (arr === hNo) {
             td.classList.add("houseNumber");
+            td.title="View Family";
             td.addEventListener("click", () => viewFamilyMembers(arr[index]));
         }
 
+if(arr===pName){
+
+
+//td.classList.add("houseNumber");
+            td.addEventListener("click", () => fetchFoto(index));
+td.title="Click For Photo";
+td.style.cursor = "pointer";
+
+
+
+}
         td.textContent = arr === 1 ? index + 1 : arr[index];
         tr.appendChild(td);
     });
@@ -222,12 +234,21 @@ function getSelectedArray() {
 ---------------------------------------- */
 closeBtn.onclick = () => {
     closeAllLists("home-table");
+
+closeAllLists("tempShow");
+
+
+
+
+    
     modal.style.display = "none";
 };
 
 window.onclick = event => {
     if (event.target === modal) {
         closeAllLists("home-table");
+       closeAllLists("tempShow");
+     
         modal.style.display = "none";
     }
 };
@@ -236,6 +257,7 @@ window.onclick = event => {
    View Family Members (Modal)
 ---------------------------------------- */
 function viewFamilyMembers(houseNumber) {
+    
     const tableBody = makeTableForOutPut(modalContent, "home-table");
 
     hNo.forEach((num, i) => {
@@ -244,7 +266,7 @@ function viewFamilyMembers(houseNumber) {
         }
     });
 
-    modalHeading.textContent = getAngadi(houseNumber)
+    modalHeading.textContent = getAngadi(houseNumber);
     modal.style.display = "block";
 }
   
@@ -264,11 +286,50 @@ function getAngadi(houseNo) {
   return "അറിയില്ല";
 }
 
+function fetchFoto(index){
+let fotoDb = "https://aqywxfzhafjtudiggioa.supabase.co/storage/v1/object/public/VotFoto/" + pName[index] + hNo[index].split("/")[0] + ".png";
 
+//modalHeading.textContent =pName[index];
+
+    fetch(fotoDb)
+    .then(response => {
+        if (!response.ok) { // check if HTTP response is OK
+            throw new Error(pName[index] + hNo[index].split("/")[0]);
+        }
+        return response.blob();
+    })
+    .then(data => {
+
+let img = document.createElement("img");
+img.classList.add("tempShow");
+let imgName=document.createElement("h4");
+imgName.textContent = pName[index];
+imgName.classList.add("tempShow");
+imgName.classList.add("noMargin");
+
+
+
+        let imgURL = URL.createObjectURL(data);
+        img.src = imgURL;
+ 
+modalContent.appendChild(img);
+modalContent.appendChild(imgName);
+    modal.style.display = "block";
+
+
+    })
+    .catch(error => {
+        alert("Failed to fetch photo: " + error.message);
+       
+    })}
 
 
 
 document.addEventListener("DOMContentLoaded", () => {
         checkFile();
         loadangadi();
+   
+
+
+
     });
