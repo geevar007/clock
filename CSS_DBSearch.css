@@ -189,5 +189,11 @@ input:focus{
             border-radius: 10px;
             background-color: #fff;
 }
+.noMargin {
+
+margin-top: 0;
+margin-bottom: 0;
+
+}
 
 
