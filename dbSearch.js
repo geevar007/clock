@@ -287,7 +287,7 @@ function getAngadi(houseNo) {
 }
 
 function fetchFoto(index){
-   let thumpFoto = (pName[index].replace(/\s+/g, "").slice(0, 6)).toLowerCase() + hNo[index].split("/")[0];
+   let thumpFoto = (pName[index].replace(/\s+/g, "").slice(0, 6) + hNo[index].split("/")[0]).toLowerCase();
 let fotoDb = "https://aqywxfzhafjtudiggioa.supabase.co/storage/v1/object/public/VotFoto/" +thumpFoto + ".png";
 
 //modalHeading.textContent =pName[index];
