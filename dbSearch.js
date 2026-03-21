@@ -287,14 +287,15 @@ function getAngadi(houseNo) {
 }
 
 function fetchFoto(index){
-let fotoDb = "https://aqywxfzhafjtudiggioa.supabase.co/storage/v1/object/public/VotFoto/" + pName[index] + hNo[index].split("/")[0] + ".png";
+   let thumpFoto= pName[index].replace(/\s+/g, "").slice(0, 6) + hNo[index].split("/")[0];
+let fotoDb = "https://aqywxfzhafjtudiggioa.supabase.co/storage/v1/object/public/VotFoto/" +thumpFoto + ".png";
 
 //modalHeading.textContent =pName[index];
 
     fetch(fotoDb)
     .then(response => {
         if (!response.ok) { // check if HTTP response is OK
-            throw new Error(pName[index] + hNo[index].split("/")[0]);
+            throw new Error(thumpFoto);
         }
         return response.blob();
     })
