@@ -7,12 +7,22 @@ let excelData = [];
 let houseGroups = {};
 let houseKeys = [];
 let houseIndex = 0;
-
+let totalHouses;
+let totalInAnga;
 let angadiArrays = {};
 let selectedAngadi = [];
 let serialNo = 0;
 
 let currentMode = "house";
+
+
+
+let isDragging = false;
+
+const container = document.getElementById("barContainer");
+const bar = document.getElementById("bar");
+const label = document.getElementById("label");
+
 
 const select = document.getElementById("areaSelect");
 const inputHno = document.getElementById("houseSearch");
@@ -29,8 +39,9 @@ const headers = rows[0];
     headers.forEach((head, i) => obj[head] = row[i] || "");
     return obj;
   });
-
+ 
   groupByHouse();
+
 }
 
 /* ---------- Group by House Number ---------- */
@@ -41,6 +52,8 @@ function groupByHouse() {
     (houseGroups[key] ??= []).push(r);
   });
   houseKeys = Object.keys(houseGroups);
+  totalHouses = houseKeys.length-1;
+ 
 }
 
 /* ---------- Display Table ---------- */
@@ -64,11 +77,26 @@ function showTable(data) {
 function viewByHouse() {
   currentMode = "house";
   houseIndex = 0;
+ 
   showHouseGroup();
+
 }
 
 function showHouseGroup() {
+  let percent;
   showTable(houseGroups[houseKeys[houseIndex]]);
+if (currentMode === "house") {percent = (houseIndex+1)/totalHouses;
+  label.innerHTML = (houseIndex+1) + " / " + totalHouses;
+}
+else{ percent = (serialNo+1) / (totalInAnga);
+
+  label.innerHTML = (serialNo+1)  + " / " + totalInAnga
+}
+
+bar.style.width = (percent * 100) + "%";
+
+
+
 }
 
 function goToHouse(hn) {
@@ -84,16 +112,18 @@ function goToHouse(hn) {
 function viewByArea() {
   currentMode = "area";
   serialNo = 0;
-  goToHouse(selectedAngadi[0]);
+  totalInAnga = selectedAngadi.length;
+ goToHouse(selectedAngadi[0]);
 }
 
 /* ---------- Navigation ---------- */
 function nextGeneric() {
   if (currentMode === "house") {
-    if (houseIndex < houseKeys.length - 1) houseIndex++;
+    if (houseIndex < totalHouses-1) houseIndex++;
     showHouseGroup();
   } else { 
-    if (serialNo < selectedAngadi.length - 1) serialNo++;
+    if (serialNo < (totalInAnga-1 )) serialNo++;
+    console.log((serialNo+1)+"/"+(totalInAnga))
     goToHouse(selectedAngadi[serialNo]);
   }
 }
@@ -123,7 +153,7 @@ rows.slice(1).forEach(row =>
     row.forEach((element, slNo) => {if(element!=''){angadiArrays[headers[slNo]].push(element)}})
   );
 
-console.log(angadiArrays);
+
   select.innerHTML = headers.map((h, i) =>
     `<option value="${h}" ${i === 0 ? "selected" : ""}>${h}</option>`
   ).join("");
@@ -133,7 +163,7 @@ console.log(angadiArrays);
 
 function angadiChange() {
   selectedAngadi = angadiArrays[select.value];
-
+totalInAnga = selectedAngadi.length;
  
   serialNo = 0;
   if (currentMode === "area") goToHouse(selectedAngadi[0]);
@@ -170,8 +200,65 @@ function getAngadi(houseNo) {
 
 
 
+function updatePosition(clientX) {
+
+ 
+    const rect = container.getBoundingClientRect();
+    let offsetX = clientX - rect.left;
+
+    // Clamp inside bar
+    if (offsetX < 0) offsetX = 1;
+    if (offsetX > rect.width) offsetX = rect.width;
+
+    let percent = offsetX / rect.width;
+    bar.style.width = (percent * 100) + "%";
+  if (currentMode === "house") { 
+    houseIndex = Math.round(percent * totalHouses);
+     label.innerHTML = houseIndex + " / " + totalHouses;}
+else{
+
+  serialNo = Math.round(percent * totalInAnga);
+
+  label.innerHTML = serialNo + " / " + totalInAnga;
+}
+
+    
+   
+    // Access array value
+ 
+}
+
+// Mouse events
+container.addEventListener("mousedown", (e) => {
+    isDragging = true;
+    updatePosition(e.clientX);
+});
+
+document.addEventListener("mousemove", (e) => {
+    if (isDragging) {
+        updatePosition(e.clientX);
+    }
+});
+
+document.addEventListener("mouseup", () => {
+    if (isDragging) {
+  
+  isDragging = false;
+  if (currentMode === "area"){    }
+   else{showHouseGroup();}}
+});
+
+// Touch support (mobile)
+container.addEventListener("touchstart", (e) => {
+    updatePosition(e.touches[0].clientX);
+});
+
+container.addEventListener("touchmove", (e) => {
+    updatePosition(e.touches[0].clientX);
+});
+
+
 /* ---------- Initialize ---------- */
 window.onload = loadSheet;
 loadSheet1();
-viewByHouse();
 
