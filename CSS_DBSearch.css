@@ -1,4 +1,13 @@
-body{margin:0px;}
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden; /* Prevents horizontal scroll on the main page */
+}
 
   
  /* Modal background */
