@@ -32,7 +32,7 @@ const mNo = [];
 let angadiArrays = {};
 
 const datas = [1, pName, rName, hNo, hName, mNo];
-const hDatas = [1, pName, hName];
+const hDatas = [1, pName, hName,mNo];
 
 /* ---------------------------------------
    Initial Setup
@@ -141,8 +141,11 @@ td.style.cursor = "pointer";
 
 
 }
-        td.textContent = arr === 1 ? index + 1 : arr[index];
-        tr.appendChild(td);
+if (arr===mNo && arr[index]){ td.innerHTML= `<a href="tel:+91${arr[index]}" class="fa fa-phone"></a>`  }
+
+ else { td.textContent = arr === 1 ? index + 1 : arr[index];
+ }
+
     });
 
     table.style.display = "block";
