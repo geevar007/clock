@@ -173,27 +173,16 @@ input:focus{
         justify-content: center;
 }
 
-#excel-file {
-            display: none;
-        }
 
-.custom-file-input {
-            min-width:87px;
-            margin-top: 1px;
-            display: inline-block;
-            padding: 5px 7px;
-            font-size: 10px;
-            
-            border: 2px solid #c2dff2;
-            color: #0863a0;
-            border-radius: 10px;
-            background-color: #fff;
-}
 .noMargin {
 
 margin-top: 0;
 margin-bottom: 0;
 
 }
+a{
 
+text-decoration: none;
+
+}
 
