@@ -145,7 +145,7 @@ if (arr===mNo && arr[index]){ td.innerHTML= `<a href="tel:+91${arr[index]}" clas
 
  else { td.textContent = arr === 1 ? index + 1 : arr[index];
  }
-
+tr.appendChild(td);
     });
 
     table.style.display = "block";
