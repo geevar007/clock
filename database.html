@@ -85,10 +85,10 @@ color: #021d5c
         .status-dot {
             width: 10px;
             height: 10px;
-            background-color: #10b981; /* Green for connected */
+            background-color: #f11616; /* Green for connected */
             border-radius: 50%;
             display: inline-block;
-            box-shadow: 0 0 8px #10b981;
+            box-shadow: 0 0 8px #f11616;;
         }
 
         /* Radio Options Style */
@@ -123,7 +123,7 @@ color: #021d5c
             max-width: 1200px;
             width: 100%;
             margin: 2rem auto;
-            padding: 0 1.5rem;
+            padding: 1px;
         }
 
         /* Search & Filter Bar */
@@ -166,18 +166,19 @@ color: #021d5c
 
         /* Dashboard Placeholder Area (Where your data will populate) */
         .data-placeholder {
+            width: 100%;
             margin-top: 1rem;
             border: 2px dashed #cbd5e1;
             border-radius: 12px;
             height: 300px;
             overflow-x: auto;
-            display: flex;
-            align-items: flex-start;
+            display:flex;
             justify-content: center;
             color: #000103;
-            
-            font-size: 14px;
+            font-size: 12px;
+            text-align: center;
         }
+
 tr:nth-child(even) {
     background-color:  #eefad2;
   }
@@ -228,8 +229,8 @@ tr:nth-child(even) {
     <!-- Responsive Header Navigation -->
     <header>
         <div class="brand-status">
-            <span class="status-dot"></span>
-            <span> <p id="fileName"></p></span>
+            <span class="status-dot"id="status-dot"></span>
+        
         </div>
         
         <div class="filter-options" id="home"style="display:none">
@@ -271,7 +272,7 @@ tr:nth-child(even) {
         <p>&copy; 2026 Your Website Name. All rights reserved.</p>
         <div class="footer-links">
             <a href="https://geevar.co.in/" target="_blank">Home</a>
-            <a href="?id=0">About</a>
+            <a href="https://geevar007.github.io/clock/sort.html"target="_blank">Sorter</a>
             <a href="?id=0">Privacy Policy</a>
             <a href="?id=0">Contact</a>
         </div>
