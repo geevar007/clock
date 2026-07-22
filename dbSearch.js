@@ -13,7 +13,7 @@ const modal = document.getElementById("myModal");
 const modalContent = document.getElementById("modal-content");
 const modalHeading = document.getElementById("houseNumber");
 const closeBtn = document.getElementsByClassName("close")[0];
-
+const statusDot =document.getElementById("status-dot");
 const angadiNames  = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTBDN4C80DC8ZWHKNKh8rU_xxx3mMO8koDbWNK89M5zXNH29iVyGtpqLDanpxjIO0DpwuHCKjYC1pbQ/pub?output=csv&gid=1619740580"; 
 const voterNames = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTBDN4C80DC8ZWHKNKh8rU_xxx3mMO8koDbWNK89M5zXNH29iVyGtpqLDanpxjIO0DpwuHCKjYC1pbQ/pub?output=csv";
 
@@ -122,8 +122,11 @@ function createOutput(table, index, totalFound, dataArray,type) {
     const tr = document.createElement("tr");
 
     dataArray.forEach(arr => {
-        const td = document.createElement("td");
 
+const td = document.createElement("td");
+
+
+    
         if (arr === hNo) {
             td.classList.add("houseNumber");
             td.title="View Family";
@@ -131,6 +134,24 @@ function createOutput(table, index, totalFound, dataArray,type) {
         }
 
 if(arr===pName){
+
+
+    if (mNo[index]) {
+        console.log(arr[index]+" have number");
+        
+        const span = document.createElement('span');
+        
+        // Use standard statements instead of the comma operator
+        span.innerHTML = `<a href="tel:+91${mNo[index]}">☎</a>`;
+        span.title = arr[index]; 
+        
+        td.append(span);
+    }
+
+
+
+
+
 
 
 //td.classList.add("houseNumber");
@@ -141,11 +162,20 @@ td.style.cursor = "pointer";
 
 
 }
-if (arr===mNo && arr[index]){ td.innerHTML= `<a href="tel:+91${arr[index]}" class="fa fa-phone"></a>`  }
 
- else { td.textContent = arr === 1 ? index + 1 : arr[index];
- }
-tr.appendChild(td);
+
+
+
+if (arr===mNo && arr[index]){ td.innerHTML= `<a href="tel:+91${arr[index]}">☎</a>`, td.title=arr[index]  }
+else{
+ td.textContent = arr === 1 ? index + 1 : arr[index]}
+ 
+
+
+
+
+       
+      if(arr[index]||arr === 1) { tr.appendChild(td)}
     });
 
     table.style.display = "block";
@@ -178,7 +208,9 @@ async function checkFile() {
   );
 
 
- document.getElementById("fileName").textContent = "Connected";
+ 
+ statusDot.style.backgroundColor="#10b981";
+ statusDot.style["box-shadow"] = " 0 0 8px #10b981"
   // UI updates (unchanged)
     newInputDiv.style.display = "flex";
     homeDiv.style.display = "flex";
